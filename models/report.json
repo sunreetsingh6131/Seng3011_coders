@@ -1,0 +1,6 @@
+{
+    "disease": [<string::disease>],
+    "syndrome": [<string::syndrome>],
+    "reported_events": [<object::event-report>],
+    "comment": <string>
+}
