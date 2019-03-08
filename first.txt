@@ -1,4 +1,0 @@
-Changed made to top line of first.txt of first_new_branch
-Hello World
-Changes made on github.com!
-Changed made on first branch!

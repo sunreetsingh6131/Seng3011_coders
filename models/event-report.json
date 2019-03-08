@@ -1,6 +1,0 @@
-{
-    "type": <string::event-type>,
-    "date": <string::date>,
-    "location": [<object::location>],
-    "number-affected": <number>
-}

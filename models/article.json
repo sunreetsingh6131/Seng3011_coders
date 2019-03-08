@@ -1,7 +1,0 @@
-{
-    "url": <string>,
-    "date_of_publication": <string::date>,
-    "headline": <string>,
-    "main_text": <string>,
-    "reports": [<object::report>]
-}
