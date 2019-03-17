@@ -19,6 +19,7 @@ if len(sys.argv) != 2:
     sys.exit();
 
 while True:
+	print ("Running Server")
         conn, addr = Socket.accept()
         try:
                 request = conn.recv(1024)
