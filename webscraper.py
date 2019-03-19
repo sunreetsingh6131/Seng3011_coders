@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import json
-from urlparse import urlparse
+from urllib.parse import urlparse
 import re
 
 url = 'https://www.cdc.gov/outbreaks/'
@@ -11,6 +11,7 @@ response = requests.get(url)
 content = BeautifulSoup(response.content, "html.parser")
 
 OutbreakArr = []
+print(content)
 for outbreaks in content.findAll('div', attrs={"class": "card-body bg-tertiary"}):
     outbreakObject = {
         "url": url,
