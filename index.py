@@ -9,7 +9,38 @@ CORS(app)
 client = MongoClient(host="mongodb://<amol>:<amoljain1>@ds117806.mlab.com:17806/seng3011")
 db = client["3011project"]
 
+#######################################################
+def save_user(name, password, email):
+    if find_user(name) == "-1":
+        db.users.insert_one({"name":name,"password":password,"email":email})
+        return '0'
+    else:
+        return '-1'
 
+########################################################
+@app.route("/register", methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def register():
+    if request.method == 'POST' and request.form.get('username') and request.form.get('password') and \
+            request.form.get('email'):
+        datax = request.form.to_dict()
+        usernamx = datax.get("username")
+        passwordx = datax.get("password")
+        emailx = datax.get("email")
+        # print(datax)
+        res = save_user(usernamx, passwordx, emailx)
+        if res == "0":
+            print('OKAY')
+            return Response(json.dumps({'message': 'User Creation successful'}), status=200)
+        else:
+            print('No')
+            return Response(json.dumps({'message': 'User Creation failed'}), status=400)
+    else:
+        return Response(json.dumps({'message': 'Missing arguments'}), status=400)
+
+
+
+##############################################################
 def find_user(name):
     ress = db.users.find_one({"name": name})
     # print(ress.get("name"))
@@ -26,6 +57,10 @@ def find_user(name):
         # print('-1+1')
         return "-1"
 
+
+
+
+#####################################################################
 @app.route('/login', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def login():
@@ -51,5 +86,7 @@ def login():
         return Response({}, status=400, mimetype='application/json')
 
 
+
+#########################################################################
 if __name__ == '__main__':
     app.run()
