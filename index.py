@@ -9,6 +9,12 @@ CORS(app)
 client = MongoClient(host="mongodb://<amol>:<amoljain1>@ds117806.mlab.com:17806/seng3011")
 db = client["3011project"]
 
+
+
+#######################################################
+Ask team :
+1. Datascraper 
+2. 
 #######################################################
 def save_user(name, password, email):
     if find_user(name) == "-1":
@@ -21,6 +27,7 @@ def save_user(name, password, email):
 @app.route("/register", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def register():
+	# this function adds the user into the database 
     if request.method == 'POST' and request.form.get('username') and request.form.get('password') and \
             request.form.get('email'):
         datax = request.form.to_dict()
@@ -42,6 +49,7 @@ def register():
 
 ##############################################################
 def find_user(name):
+	# this function helps to find a registered user wrt his/her name 
     ress = db.users.find_one({"name": name})
     # print(ress.get("name"))
     # username = ress.get("name")
@@ -64,6 +72,7 @@ def find_user(name):
 @app.route('/login', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def login():
+	# function is a login checkker 
     if request.method == 'POST' and request.form.get('username') and request.form.get('password'):
         datax = request.form.to_dict()
         usernamx = datax.get("username")
