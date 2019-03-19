@@ -1,11 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 import json
-from urlparse import urlparse
 import re
 
 url = 'https://www.cdc.gov/outbreaks/'
-print(hi)
+
 response = requests.get(url)
 
 content = BeautifulSoup(response.content, "html.parser")
@@ -22,3 +21,11 @@ for outbreaks in content.findAll('div', attrs={"class": "card-body bg-tertiary"}
     OutbreakArr.append(outbreakObject)
 with open('data.json', 'w') as outfile:
     json.dump(OutbreakArr, outfile)
+
+with open('data.json') as json_data:
+    jsonData = json.load(json_data)
+
+for i in jsonData:
+    print i['url']
+    print i['date_of_publication']
+    print i['headline']
