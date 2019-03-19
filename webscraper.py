@@ -5,7 +5,7 @@ from urlparse import urlparse
 import re
 
 url = 'https://www.cdc.gov/outbreaks/'
-
+print(hi)
 response = requests.get(url)
 
 content = BeautifulSoup(response.content, "html.parser")
