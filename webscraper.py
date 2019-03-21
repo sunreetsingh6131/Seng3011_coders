@@ -39,37 +39,46 @@ for outbreaks in bulletPoints.findAll('li'):
         url4newpage = urls.get('href')
         if pattern.match(url4newpage):
             newPageContent = fetchNewPages(url4newpage)
-
-
             #checks if the link is none
             checkHeadline = newPageContent.find("h1", attrs={"id": "content"})
-            print checkHeadline
-
             if checkHeadline != None:
                 headline = newPageContent.find("h1", attrs={"id": "content"}).text.encode('utf-8')
             else:
                 headline = "unknown"
 
             checkTime = newPageContent.find("p").text.encode('utf-8')
+            #print checkTime
+
             match = re.search(r'\s \d{2}, \d{4}', checkTime)
+            #print match
             checkTime = re.sub('[pP]osted ','', checkTime)
+            #print checkTime
             pattern4time = '(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May?|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?) ([0-9]?[0-9])(,?) ([0-9]{4})'
             matchTime = re.search(pattern4time, checkTime)
+            #print matchTime
             if matchTime is None:
-                continue
-            s1 = matchTime.group(0)
-            d = datetime.datetime.strptime(s1, '%B %d, %Y')
-            paragraph_text = newPageContent.find("p")
-            print url4newpage
-            print (d.strftime('%Y-%m-%d'))
-
-            print "\n"
+                except1 = newPageContent.find('span', attrs={"class": "text-red"}) #.find("span", attrs={"class": "text-red"})
+                if except1 != None:
+                    pattern4time = '(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May?|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?) ([0-9]?[0-9])(,?) ([0-9]{4})'
+                    matchTime = re.search(pattern4time, except1.text)
+                    s1 = matchTime.group(0)
+                    d = datetime.datetime.strptime(s1, '%B %d, %Y')
+                    paragraph_text = newPageContent.find("p")
+                    dateOfPublication = d.strftime('%Y-%m-%d')
+                else:
+                    dateOfPublication = "unknown"
+            else:
+                s1 = matchTime.group(0)
+                #print s1
+                d = datetime.datetime.strptime(s1, '%B %d, %Y')
+                paragraph_text = newPageContent.find("p")
+                dateOfPublication = d.strftime('%Y-%m-%d')
 
             outbreakObject = {
 
                 "url": url4newpage,
                 "headline": headline,
-                #"date_of_publication": outbreaks.find('span', attrs={"class": "item-pubdate"}).text.encode('utf-8'),
+                "date_of_publication": dateOfPublication,
                 #"headline": outbreaks.find('a', attrs={"class": "feed-item-title"}).text.encode('utf-8'),
                 #"main_text": tweet.find('p', attrs={"class": "likes"}).text.encode('utf-8'),
                 #"reports": tweet.find('p', attrs={"class": "shares"}).text.encode('utf-8')
@@ -93,6 +102,6 @@ for outbreaks in bulletPoints.findAll('li'):
 for i in jsonData:
     print i['url']
     print i['headline']
-    #print i['date_of_publication']
+    print i['date_of_publication']
     #print i['headline']
-    #print "\n"
+    print "\n"
