@@ -37,8 +37,10 @@ for outbreaks in bulletPoints.findAll('li'):
     urls = outbreaks.find('a')
     if urls != None:
         url4newpage = urls.get('href')
+
         if pattern.match(url4newpage):
             newPageContent = fetchNewPages(url4newpage)
+
             #checks if the link is none
             checkHeadline = newPageContent.find("h1", attrs={"id": "content"})
             if checkHeadline != None:
@@ -74,13 +76,26 @@ for outbreaks in bulletPoints.findAll('li'):
                 paragraph_text = newPageContent.find("p")
                 dateOfPublication = d.strftime('%Y-%m-%d')
 
+
+            #body > div.container.d-flex.flex-wrap.body-wrapper.bg-white > main > div:nth-child(3) > div > div.syndicate > p:nth-child(18)
+
+            #card-header h4 bg-secondary 3-4/6 links working
+            checkMainText = newPageContent.find('div', attrs={"class": "card mb-3"})
+            #checkMainText1 = newPageContent.select("body > div.container.d-flex.flex-wrap.body-wrapper.bg-white > main > div:nth-child(3) > div > div:nth-child(4) > div > p:nth-child(4)")
+            #print checkMainText1
+            if checkMainText != None:
+                checkMainText = checkMainText.text
+                #checkMainText2 = newPageContent.select("body > div.container.d-flex.flex-wrap.body-wrapper.bg-white > main > div:nth-child(3) > div > div.syndicate > div:nth-child(3) > div > div.card.mb-3 > div.card-body.bg-white > p:nth-child(2)")
+                #print checkMainText2
+            else:
+                checkMainText = "unknown"
+
             outbreakObject = {
 
                 "url": url4newpage,
                 "headline": headline,
                 "date_of_publication": dateOfPublication,
-                #"headline": outbreaks.find('a', attrs={"class": "feed-item-title"}).text.encode('utf-8'),
-                #"main_text": tweet.find('p', attrs={"class": "likes"}).text.encode('utf-8'),
+                "main_text": checkMainText ,
                 #"reports": tweet.find('p', attrs={"class": "shares"}).text.encode('utf-8')
 
                 # {"reports": [
@@ -100,8 +115,8 @@ for outbreaks in bulletPoints.findAll('li'):
 
 
 for i in jsonData:
-    print i['url']
-    print i['headline']
-    print i['date_of_publication']
-    #print i['headline']
+    print "URL: "+ i['url']
+    print "HEADLINE: "+ i['headline']
+    print "DATE: " + i['date_of_publication']
+    print "BODY: "+ i['main_text']
     print "\n"
