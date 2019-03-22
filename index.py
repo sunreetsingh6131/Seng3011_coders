@@ -1,101 +1,60 @@
 from flask import Flask, request, Response
-from pymongo import MongoClient
+from flask_restplus import Api, Resource , fields
+import datetime , re
 import json, os, time, decimal, re, subprocess,random,string
-from flask_cors import CORS
-from flask_restful.utils.cors import crossdomain
 
-app = Flask(__name__)
-CORS(app)
-client = MongoClient(host="mongodb://<amol>:<amoljain1>@ds117806.mlab.com:17806/seng3011")
-db = client["3011project"]
+app=Flask(__name__)
+api = Api(app)
 
 
-
-#######################################################
-Ask team :
-1. Datascraper 
-2. 
-#######################################################
-def save_user(name, password, email):
-    if find_user(name) == "-1":
-        db.users.insert_one({"name":name,"password":password,"email":email})
-        return '0'
-    else:
-        return '-1'
-
-########################################################
-@app.route("/register", methods=['POST', 'OPTIONS'])
-@crossdomain(origin='*')
-def register():
-	# this function adds the user into the database 
-    if request.method == 'POST' and request.form.get('username') and request.form.get('password') and \
-            request.form.get('email'):
-        datax = request.form.to_dict()
-        usernamx = datax.get("username")
-        passwordx = datax.get("password")
-        emailx = datax.get("email")
-        # print(datax)
-        res = save_user(usernamx, passwordx, emailx)
-        if res == "0":
-            print('OKAY')
-            return Response(json.dumps({'message': 'User Creation successful'}), status=200)
-        else:
-            print('No')
-            return Response(json.dumps({'message': 'User Creation failed'}), status=400)
-    else:
-        return Response(json.dumps({'message': 'Missing arguments'}), status=400)
+# function used to split a date strting 
+def getDateInParts(inputs):
+		s_year = re.search('^[0-9]{4}-' , inputs).group()
+		s_year = re.search('^[0-9]{4}' , s_year).group()
+		s_date = re.search('-[0-9]{2}-', inputs).group()
+		s_date = re.search('[0-9]{2}', s_date).group()
+		s_month = re.search('-[0-9]{2}T', inputs).group()
+		s_month = re.search('[0-9]{2}', s_month).group()
+		s_hour = re.search('T[0-9]{2}:', inputs).group()
+		s_hour = re.search('[0-9]{2}', s_hour).group()
+		s_min = re.search(':[0-9]{2}:', inputs).group()
+		s_min = re.search('[0-9]{2}', s_min).group()
+		s_sec = re.search(':[0-9]{2}$', inputs).group()
+		s_sec = re.search('[0-9]{2}', s_sec).group()
+		return s_year, s_date ,s_month, s_hour, s_min , s_sec
 
 
 
-##############################################################
-def find_user(name):
-	# this function helps to find a registered user wrt his/her name 
-    ress = db.users.find_one({"name": name})
-    # print(ress.get("name"))
-    # username = ress.get("name")
-    # password = ress.get("password")
-    # user_info = [username,password]
-    # print(user_info[0])
-    # print(ress)
-    if ress is not None:
-        # print('222')
-        user_info = [ress.get("name"), ress.get("password")]
-        return user_info
-    else:
-        # print('-1+1')
-        return "-1"
+@api.route('/show')
+class show(Resource):
+	
+	def get(self):
+
+		inputs = request.get_json()
+		location = inputs['location']
+		#  now key terms are a array 
+		key_terms = inputs['key_terms']
+		key_terms = re.split(',', key_terms)
+		# splitted the date string
+		s_year, s_date ,s_month, s_hour, s_min , s_sec = getDateInParts(inputs['start_date'])
+		# start_date = datetime.datetime(s_year, s_date ,s_month, s_hour, s_min , s_sec)
+		e_year, e_date ,e_month, e_hour, e_min , e_sec = getDateInParts(inputs['end_date'])
+		# end_date = datetime.datetime(s_year, s_date ,s_month, s_hour, s_min , s_sec)
 
 
 
-
-#####################################################################
-@app.route('/login', methods=['POST', 'OPTIONS'])
-@crossdomain(origin='*')
-def login():
-	# function is a login checkker 
-    if request.method == 'POST' and request.form.get('username') and request.form.get('password'):
-        datax = request.form.to_dict()
-        usernamx = datax.get("username")
-        passwordx = datax.get("password")
-        print(usernamx, passwordx)
-        res = find_user(usernamx)
-        # format of res is [username, password]
-        print(res[0])
-        if res == "-1":
-            print('-1')
-            # return {'status': "user not found"}, status.HTTP_404_NOT_FOUND
-            return Response(json.dumps({'message': "user not found"}), status=404, mimetype='application/json')
-        elif passwordx != res[1]:
-            print("0")
-            return Response(json.dumps({'message': 'password incorrect'}), status=401, mimetype='application/json')
-        else:
-            key = generateKey()
-            return Response(json.dumps({'username': usernamx, 'key': key}), status=200, mimetype='application/json')
-    else:
-        return Response({}, status=400, mimetype='application/json')
+		# start_date = datetime.datetime()
+		sample_result = {
+		    'url':"www.google.com",
+		    'date_of_publication':"2016-05-19",
+		    'headline':"My Name is amol",
+		    'main_text':"I am the best human being in the world",
+		    'reports': "NULL"
+		 }
+		return sample_result
 
 
-
+# this is the main file 
 #########################################################################
 if __name__ == '__main__':
-    app.run()
+	app.run(debug=True)
