@@ -1,0 +1,84 @@
+swagger: '2.0'
+info:
+  description: This is a simple API
+  version: 1.0.0
+  title: Simple API
+
+
+
+paths:
+  /reports:
+    get:
+      summary: searches reports
+      operationId: searchReports
+      description: |
+        By passing in the appropriate parameters, you can search for
+        available reports in the CDC
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: searchReports
+        description: pass an search string for looking up reports
+        required: true
+        type: string
+      - in: query
+        name: startDate
+        description: start of period of time for looking up reports
+        type: string 
+        format: date-time
+        required: true
+      - in: query
+        name: endDate
+        description: end of period of time for looking up reports 
+        type: string
+        format: date-time
+        required: true
+      - in: query
+        name: location
+        description: location for looking up reports
+        type: string
+        required: true
+      responses:
+        200:
+          description: search results matching input parameters
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Report'
+        400:
+          description: bad request missing parameters, please enter parameters as shown below
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Report'
+
+definitions:
+  Report:
+    type: object
+    required:
+    - url
+    - date_of_publication
+    - headline
+    - main_text
+    properties:
+      url:
+        type: string
+        format: url
+        example: www.who.int/lalala
+      date_of_publication:
+        type: string
+        format: date-time
+        example: 2018-12--12Txx:xx:xx
+      headline:
+        type: string
+        example: Outbreaks in Southern Vietnam
+      main_text:
+        type: string
+        example: Three people infected by what is thought to be...
+        
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /samantha-p/cdc-scraper/1.0.0
+schemes:
+ - https
