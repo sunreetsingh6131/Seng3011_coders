@@ -51,7 +51,11 @@ class show(Resource):
 		    'main_text':"I am the best human being in the world",
 		    'reports': "NULL"
 		 }
-		return sample_result
+		sample_result2 = {
+			'error':'404',
+			'details' : "couldnt find any report on the given set of keywords"
+		}
+		return sample_result2
 
 
 # this is the main file 
