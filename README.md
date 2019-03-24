@@ -15,4 +15,4 @@ webscraper.py :
 
 
 
-API online url - 
+API online url - Base URL: virtserver.swaggerhub.com/samantha-p/cdc-scraper/1.0.0 
