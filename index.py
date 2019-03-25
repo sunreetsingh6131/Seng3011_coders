@@ -51,7 +51,7 @@ class show(Resource):
             'main_text':"CDC and public health officials are investigating a multistate outbreak of salmonella infections linked to pet hedgehog ",
             'reports': "NULL"
             }
-            sample_result2 = {
+        sample_result2 = {
             'error':'404',
             'details' : "couldnt find any report on the given set of keywords"
         }
