@@ -11,8 +11,4 @@ and in the http://127.0.0.1:PORTNUMBER/index.html to display the content of the 
 
 Try and run the Webserver.py at a different port everytime to avoid the message "Port number already in use!"
 
-webscraper.py : 
-
-
-
-API online url - Base URL: virtserver.swaggerhub.com/samantha-p/cdc-scraper/1.0.0 
+API Base online url - virtserver.swaggerhub.com/samantha-p/cdc-scraper/1.0.0 
