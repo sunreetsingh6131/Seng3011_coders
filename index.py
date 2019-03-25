@@ -45,10 +45,10 @@ class show(Resource):
         
         # start_date = datetime.datetime()
         sample_result = {
-            'url':"www.google.com",
-            'date_of_publication':"2016-05-19",
-            'headline':"My Name is amol",
-            'main_text':"I am the best human being in the world",
+            'url':"www.cdc.gov/salmonella/typhimurium-01-09/index.html",
+            'date_of_publication':"2019-01-25",
+            'headline':"Outbreak of Salmonella infections linked to pet hedgehogs ",
+            'main_text':"CDC and public health officials are investigating a multistate outbreak of salmonella infections linked to pet hedgehog ",
             'reports': "NULL"
             }
             sample_result2 = {
