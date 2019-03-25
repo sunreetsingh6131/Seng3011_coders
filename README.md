@@ -13,3 +13,7 @@ Try and run the Webserver.py at a different port everytime to avoid the message 
 
 API Base online url - virtserver.swaggerhub.com/samantha-p/cdc-scraper/1.0.0 
 
+Run the file index.py(to access the API) with:
+
+python3 index.py 
+It will produce the url as http://127.0.0.1:5000/ where the calls to API can be made.
