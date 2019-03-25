@@ -53,9 +53,9 @@ class show(Resource):
             }
             sample_result2 = {
             'error':'404',
-        'details' : "couldnt find any report on the given set of keywords"
+            'details' : "couldnt find any report on the given set of keywords"
         }
-    return sample_result2
+        return sample_result2
 
 
 # this is the main file
