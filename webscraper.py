@@ -3,9 +3,21 @@ from bs4 import BeautifulSoup
 import json
 import re
 import datetime
+import mysql.connector
 from datetime import date
 
-
+#db = mysql.connector.connect(host="127.0.0.1",user="root",passwd="")
+db = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  passwd="Password"
+  #auth_plugin="caching_sha2_password"
+)
+cur = db.cursor()
+cur.execute('Create database if not exists cdcDB')
+cur.execute('use cdcDB')
+table ='create table if not exists outbreakTable(id int NOT NULL AUTO_INCREMENT, url varchar(100), headline varchar(100), details varchar(255), PRIMARY KEY (id))'
+cur.execute(table)
 # class Student(object):
 #     name = ""
 #     age = 0
@@ -90,6 +102,12 @@ for outbreaks in bulletPoints.findAll('li'):
             else:
                 checkMainText = "unknown"
 
+            urlAtt = url4newpage
+            headlineAtt = headline
+            dopAtt = dateOfPublication
+            main_textAtt = checkMainText
+
+
             outbreakObject = {
 
                 "url": url4newpage,
@@ -113,6 +131,10 @@ for outbreaks in bulletPoints.findAll('li'):
             with open('data.json') as json_data:
                 jsonData = json.load(json_data)
 
+            cur.execute('insert into outbreakTable values (%s,%s,%s,%s)',(urlAtt,headlineAtt,dopAtt, main_textAtt))
+            cur.execute('select * from outbreakTable')
+            cur.commit()
+            cur.fetchall()
 
 for i in jsonData:
     print "URL: "+ i['url']
@@ -120,3 +142,6 @@ for i in jsonData:
     print "DATE: " + i['date_of_publication']
     print "BODY: "+ i['main_text']
     print "\n"
+
+
+db.close()
