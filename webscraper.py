@@ -13,11 +13,32 @@ db = mysql.connector.connect(
   passwd="Password"
   #auth_plugin="caching_sha2_password"
 )
+
 cur = db.cursor()
+
+def checkTableExists(db, tablename):
+    dbcur = db.cursor()
+    dbcur.execute("""
+        SELECT COUNT(*)
+        FROM information_schema.tables
+        WHERE table_name = '{0}'
+        """.format(tablename.replace('\'', '\'\'')))
+    if dbcur.fetchone()[0] == 1:
+        dbcur.close()
+        return True
+
+    dbcur.close()
+    return False
+
+Tname1 = "outbreakTable"
+
 cur.execute('Create database if not exists cdcDB')
 cur.execute('use cdcDB')
-table ='create table if not exists outbreakTable(id int NOT NULL AUTO_INCREMENT, url varchar(100), headline varchar(100), details varchar(255), PRIMARY KEY (id))'
-cur.execute(table)
+if checkTableExists(db, Tname1) == True:
+    cur.execute('DROP TABLE IF EXISTS `outbreakTable`')
+    table ='create table outbreakTable(id int NOT NULL AUTO_INCREMENT, url varchar(300), headline varchar(200), date varchar(20), details varchar(1000), PRIMARY KEY (id))'
+    cur.execute(table)
+    cur.execute('ALTER TABLE outbreakTable AUTO_INCREMENT = 1')
 # class Student(object):
 #     name = ""
 #     age = 0
@@ -131,17 +152,20 @@ for outbreaks in bulletPoints.findAll('li'):
             with open('data.json') as json_data:
                 jsonData = json.load(json_data)
 
-            cur.execute('insert into outbreakTable values (%s,%s,%s,%s)',(urlAtt,headlineAtt,dopAtt, main_textAtt))
+            cur.execute('insert into outbreakTable (url, headline, date, details) values (%s,%s,%s,%s)',(urlAtt,headlineAtt,dopAtt, main_textAtt))
             cur.execute('select * from outbreakTable')
-            cur.commit()
-            cur.fetchall()
+            #cur.commit()
+            rows = cur.fetchall()
+            print('Total Row(s):', cur.rowcount)
+            for row in rows:
+                print(row)
 
-for i in jsonData:
-    print "URL: "+ i['url']
-    print "HEADLINE: "+ i['headline']
-    print "DATE: " + i['date_of_publication']
-    print "BODY: "+ i['main_text']
-    print "\n"
+# for i in jsonData:
+    # print "URL: "+ i['url']
+    # print "HEADLINE: "+ i['headline']
+    # print "DATE: " + i['date_of_publication']
+    # print "BODY: "+ i['main_text']
+    # print "\n"
 
 
 db.close()
