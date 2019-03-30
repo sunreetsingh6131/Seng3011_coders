@@ -1,11 +1,15 @@
 from flask import Flask, request, Response
+from flask_api import status
 from flask_restplus import Api, Resource , fields
 import datetime , re
-import json, os, time, decimal, re, subprocess,random,string
+import json, os, time, decimal, re, subprocess,random,string, jsonify
+from bottle import HTTPResponse
 
 app=Flask(__name__)
 api = Api(app)
 
+
+headers = {'content-type': 'application/json'}
 
 # function used to split a date strting 
 def getDateInParts(inputs):
@@ -33,6 +37,15 @@ class show(Resource):
 		inputs = request.get_json()
 		location = inputs['location']
 		#  now key terms are a array 
+		# Edge Case 1 :
+		if location == "" and inputs['key_terms'] is "":
+			res = {
+				'status_code': 400,
+				'details': "input incorrect"
+				} 
+			return res,status.HTTP_400_BAD_REQUEST
+
+
 		key_terms = inputs['key_terms']
 		key_terms = re.split(',', key_terms)
 		# splitted the date string
@@ -41,21 +54,16 @@ class show(Resource):
 		e_year, e_date ,e_month, e_hour, e_min , e_sec = getDateInParts(inputs['end_date'])
 		# end_date = datetime.datetime(s_year, s_date ,s_month, s_hour, s_min , s_sec)
 
-
-
 		# start_date = datetime.datetime()
 		sample_result = {
-		    'url':"www.google.com",
-		    'date_of_publication':"2016-05-19",
-		    'headline':"My Name is amol",
-		    'main_text':"I am the best human being in the world",
-		    'reports': "NULL"
+		    'url':"www.cdc.gov/salmonella/typhimurium-01-09/index.html",
+            'date_of_publication':"2019-01-25",
+            'headline':"Outbreak of Salmonella infections linked to pet hedgehogs ",
+            'main_text':"CDC and public health officials are investigating a multistate outbreak of salmonella infections linked to pet hedgehog ",
+            'reports': "NULL"
 		 }
-		sample_result2 = {
-			'error':'404',
-			'details' : "couldnt find any report on the given set of keywords"
-		}
-		return sample_result2
+
+		return sample_result , status.HTTP_200_OK
 
 
 # this is the main file 
