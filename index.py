@@ -74,18 +74,22 @@ class show(Resource):
 
         cur.execute('SELECT * from outbreakTable WHERE details LIKE %(%s)% AND date BETWEEN (%s) and (%s)', location, s_date, e_date)
         result_rows = cur.fetchall()
-
-        # If there are no rows matching our query
-        if len(cur.fetchall) == 0:
-        	no_res = {}
-
-		return no_res , status.HTTP_200_OK
-
-
        
         sample_result = {}
 
         for row in result_rows:
+        	# For each word in key term check if it is in title/headline
+            isSubstring = True;
+            for word in key_terms
+                # If term not substring of headline break
+                if word not in row[1]:
+                	isSubstring = False;
+                    break
+            
+            # If not all keywords are substring of headline goto next row
+            if isSubstring == False:
+            	continue
+
         	# row[0]=url,row[1]=headline,row[2]=date_of_publication,row[3]=main_text
             # Create dictionary
             data=[]
