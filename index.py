@@ -2,6 +2,7 @@ from flask import Flask, request, Response
 from flask_api import status
 from flask_restplus import Api, Resource , fields
 import datetime , re
+import mysql.connector
 import json, os, time, decimal, re, subprocess,random,string, jsonify
 from bottle import HTTPResponse
 
@@ -48,6 +49,11 @@ class show(Resource):
 
 		key_terms = inputs['key_terms']
 		key_terms = re.split(',', key_terms)
+		##########################################
+		# Get the Date
+        s_date = inputs['start_date']
+        e_date = inputs['end_date']
+		##########################################
 		# splitted the date string
 		s_year, s_date ,s_month, s_hour, s_min , s_sec = getDateInParts(inputs['start_date'])
 		# start_date = datetime.datetime(s_year, s_date ,s_month, s_hour, s_min , s_sec)
@@ -55,13 +61,56 @@ class show(Resource):
 		# end_date = datetime.datetime(s_year, s_date ,s_month, s_hour, s_min , s_sec)
 
 		# start_date = datetime.datetime()
-		sample_result = {
-		    'url':"www.cdc.gov/salmonella/typhimurium-01-09/index.html",
-            'date_of_publication':"2019-01-25",
-            'headline':"Outbreak of Salmonella infections linked to pet hedgehogs ",
-            'main_text':"CDC and public health officials are investigating a multistate outbreak of salmonella infections linked to pet hedgehog ",
-            'reports': "NULL"
-		 }
+        ###############################################################################################################################
+		# connect to our database
+        db = mysql.connector.connect(
+          host="localhost",
+          user="root",
+          passwd="Password"
+        )
+
+        cur = db.cursor()
+        cur.execute('use cdcDB')
+
+        cur.execute('SELECT * from outbreakTable WHERE details LIKE %(%s)% AND date BETWEEN (%s) and (%s)', location, s_date, e_date)
+        result_rows = cur.fetchall()
+
+        # If there are no rows matching our query
+        if len(cur.fetchall) == 0:
+        	no_res = {}
+
+		return no_res , status.HTTP_200_OK
+
+
+       
+        sample_result = {}
+
+        for row in result_rows:
+        	# row[0]=url,row[1]=headline,row[2]=date_of_publication,row[3]=main_text
+            # Create dictionary
+            data=[]
+            item = {                
+                "url": row[0],
+                "headline": row[1],
+                "date_of_publication": row[2],
+                "main_text": row[3], 
+            }
+
+            # Fill dictionary with items
+            data.append(item)
+
+        # Append to json object
+        sample_result = json.dumps(data)
+
+        ##################################################################################################################################
+
+		# sample_result = {
+		#     'url':"www.cdc.gov/salmonella/typhimurium-01-09/index.html",
+  #           'date_of_publication':"2019-01-25",
+  #           'headline':"Outbreak of Salmonella infections linked to pet hedgehogs ",
+  #           'main_text':"CDC and public health officials are investigating a multistate outbreak of salmonella infections linked to pet hedgehog ",
+  #           'reports': "NULL"
+		#  }
 
 		return sample_result , status.HTTP_200_OK
 
