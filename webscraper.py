@@ -137,6 +137,13 @@ for outbreaks in bulletPoints.findAll('li'):
                 "main_text": checkMainText ,
                 #"reports": tweet.find('p', attrs={"class": "shares"}).text.encode('utf-8')
 
+                # library(stringr)
+                # str_locate("aaa12xxx", "[0-9]+")
+                # #      start end
+                # # [1,]     4   5
+                # str_extract("aaa12xxx", "[0-9]+")
+                # # [1] "12"
+
                 # {"reports": [
                 #     {   "diseases": 100,
                 #         "syndrome": "reception",
@@ -153,8 +160,8 @@ for outbreaks in bulletPoints.findAll('li'):
                 jsonData = json.load(json_data)
 
             cur.execute('insert into outbreakTable (url, headline, date, details) values (%s,%s,%s,%s)',(urlAtt,headlineAtt,dopAtt, main_textAtt))
+            db.commit()
             cur.execute('select * from outbreakTable')
-            #cur.commit()
             rows = cur.fetchall()
             print('Total Row(s):', cur.rowcount)
             for row in rows:
