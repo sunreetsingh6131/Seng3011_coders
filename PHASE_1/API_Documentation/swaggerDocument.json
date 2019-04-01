@@ -55,7 +55,7 @@ paths:
                       example: https://www.cdc.gov/brucellosis/exposure/drug-resistant-brucellosis-linked-raw-milk.html
                     date_of_publication:
                       type: string
-                      example: 2019-02-09
+                      example: 2019-02-09T3:00:00
                       format: date-time
                     headline:
                       type: string
@@ -66,8 +66,48 @@ paths:
                       example: The Centers for Disease Control and Prevention and state
                         health officials..
                     reports:
-                      type: string
-                      example: yet to be implemented
+                      type: object
+                      required:
+                      - disease
+                      - syndrome
+                      - reported_events
+                      - Comment
+                      properties:
+                        disease:
+                          type: string
+                          example: Ebola
+                        syndrome:
+                          type: string
+                          example: null
+                        reported_events:
+                          type: object
+                          required:
+                          - type
+                          - date
+                          - location
+                          - number_affected
+                          properties:
+                            type:
+                              type: string
+                              example: hospitalized
+                            date:
+                              type: string
+                              example: 2018-12-01Txx:xx:xx to 2018-12-10Txx:xx:xx
+                            location:
+                              type: object
+                              required:
+                              - genonames-id
+                              properties:
+                                geonames-id:
+                                  type: integer
+                                  example: 1566083
+                            number_affected:
+                              type: integer
+                              example: 2
+                        Comment:
+                          type: string
+                          example: This outbreak is being contained
+              
         400:
           description: Could not find the report
         404:
@@ -109,8 +149,47 @@ paths:
                       example: The Centers for Disease Control and Prevention and state
                         health officials..
                     reports:
-                      type: string
-                      example: yet to be implemented
+                      type: object
+                      required:
+                      - disease
+                      - syndrome
+                      - reported_events
+                      - Comment
+                      properties:
+                        disease:
+                          type: string
+                          example: Ebola
+                        syndrome:
+                          type: string
+                          example: null
+                        reported_events:
+                          type: object
+                          required:
+                          - type
+                          - date
+                          - location
+                          - number_affected
+                          properties:
+                            type:
+                              type: string
+                              example: hospitalized
+                            date:
+                              type: string
+                              example: 2018-12-01Txx:xx:xx to 2018-12-10Txx:xx:xx
+                            location:
+                              type: object
+                              required:
+                              - genonames-id
+                              properties:
+                                geonames-id:
+                                  type: integer
+                                  example: 1566083
+                            number_affected:
+                              type: integer
+                              example: 2
+                        Comment:
+                          type: string
+                          example: This outbreak is being contained
         400:
           description: No report found
         404:
