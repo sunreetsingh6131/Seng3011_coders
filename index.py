@@ -6,6 +6,13 @@ import json, os, time, decimal, re, subprocess,random,string
 app=Flask(__name__)
 api = Api(app)
 
+db = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="Password"
+    )
+
+cur = db.cursor()
 
 # function used to split a date strting
 def getDateInParts(inputs):
@@ -29,8 +36,6 @@ def getDateInParts(inputs):
 class show(Resource):
     
     def get(self):
-        
-        def get(self):
 
         inputs = request.get_json()
         location = inputs['location']
@@ -60,13 +65,7 @@ class show(Resource):
         # start_date = datetime.datetime()
         ###############################################################################################################################
         # connect to our database
-        db = mysql.connector.connect(
-          host="localhost",
-          user="root",
-          passwd="Password"
-        )
-
-        cur = db.cursor()
+        
         cur.execute('use cdcDB')
 
         cur.execute('SELECT * from outbreakTable WHERE details LIKE %(%s)% AND date BETWEEN (%s) and (%s)', location, s_date, e_date)
@@ -77,7 +76,7 @@ class show(Resource):
         for row in result_rows:
             # For each word in key term check if it is in title/headline
             isSubstring = True;
-            for word in key_terms
+            for word in key_terms:
                 # If term not substring of headline break
                 if word not in row[1]:
                     isSubstring = False;
@@ -119,4 +118,4 @@ class show(Resource):
 # this is the main file
 #########################################################################
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0',port=5000, debug=True)

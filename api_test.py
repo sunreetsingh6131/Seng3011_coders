@@ -21,7 +21,7 @@ sample_input = json.dumps({
     'end_date': "2019-02-21T05:45:10"
 })
 
-
+url = 'http://0.0.0.0:5000/show'
 
 
 
@@ -29,7 +29,7 @@ sample_input = json.dumps({
 def case1():
 	print("Test Case 1: Checking for a sample wrong input")
 	# print(sample_input2)
-	r = requests.get('http://127.0.0.1:5000/show', data=sample_input2 , headers=headers)
+	r = requests.get(url, data=sample_input2 , headers=headers)
 	# print(r.status_code)
 	assert(r.status_code == 400)
 	# print(r.text)
@@ -40,7 +40,7 @@ def case1():
 def case2():
 	print("Test case 2: Checking if the input is correct")
 	# print(sample_input)
-	r = requests.get('http://127.0.0.1:5000/show', data=sample_input , headers=headers)
+	r = requests.get(url, data=sample_input , headers=headers)
 	print("\t2.1 Check the status code")
 	assert(r.status_code == 200)
 	print("\tTest 2.1: Pass ")
