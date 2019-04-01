@@ -111,3 +111,7 @@ paths:
                     reports:
                       type: string
                       example: yet to be implemented
+        400:
+          description: No report found
+        404:
+          description: Page not found
