@@ -11,7 +11,7 @@ and in the http://127.0.0.1:PORTNUMBER/index.html to display the content of the 
 
 Try and run the Webserver.py at a different port everytime to avoid the message "Port number already in use!"
 
-API Base online url - http://35.189.54.60:5000/show
+API Base online url - http://35.189.54.60:5000/
 
 Run the file index.py(to access the API) with:
 
