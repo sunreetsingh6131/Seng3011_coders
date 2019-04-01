@@ -61,4 +61,4 @@ class show(Resource):
 # this is the main file
 #########################################################################
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)

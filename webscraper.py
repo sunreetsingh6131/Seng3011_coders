@@ -34,9 +34,9 @@ Tname1 = "outbreakTable"
 
 cur.execute('Create database if not exists cdcDB')
 cur.execute('use cdcDB')
-if checkTableExists(db, Tname1) == True:
+if checkTableExists(db, Tname1) != True:
     cur.execute('DROP TABLE IF EXISTS `outbreakTable`')
-    table ='create table outbreakTable(id int NOT NULL AUTO_INCREMENT, url varchar(300), headline varchar(200), date varchar(20), details varchar(1000), PRIMARY KEY (id))'
+    table ='create table if not exists outbreakTable(id int NOT NULL AUTO_INCREMENT, url varchar(300), headline varchar(200), date varchar(20), details varchar(1000), PRIMARY KEY (id))'
     cur.execute(table)
     cur.execute('ALTER TABLE outbreakTable AUTO_INCREMENT = 1')
 # class Student(object):
