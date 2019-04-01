@@ -1,0 +1,113 @@
+openapi: 3.0.0
+servers: 
+  - url: 'https://app.swaggerhub.com/apis/SENG3011_Coders/scraper/1.0.0#/default/get_outbreaks'
+info:
+  version: '1.0.0-oas3'
+  title: Map Outbreaks
+  description: This is a simple server to handle disease outbreaks in different areas of
+    world.  
+paths:
+  /outbreaks:
+    get:
+      description: Get all the disease outbreaks
+      parameters:
+        - name: startDate
+          in: query
+          description: Get all the outbreaks between start date and end date
+          schema:
+            type: string
+            example: 2017-07-21T17:32:28
+            format: date-time
+          required: true
+        - name: endDate
+          in: query
+          description: Get all the outbreaks between start date and end date
+          schema:
+            type: string
+            format: date-time
+            example: 2017-08-21T17:32:28
+          required: true
+        - name: keyWords
+          in: query
+          description: Search the reports with the keywords
+          schema:
+            type: string
+            example: measles
+          required: true
+        - name: location
+          in: query
+          description: Search the reports in a particular             location
+          schema:
+            type: string
+            example: California
+          required: true
+      responses:
+        200:
+          description: Succesfully found the report
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: string
+                      example: https://www.cdc.gov/brucellosis/exposure/drug-resistant-brucellosis-linked-raw-milk.html
+                    date_of_publication:
+                      type: string
+                      example: 2019-02-09
+                      format: date-time
+                    headline:
+                      type: string
+                      example: Exposures to Drug  -Resistant Brucellosis Linked   to
+                        Raw Milk
+                    main_text:
+                      type: string
+                      example: The Centers for Disease Control and Prevention and state
+                        health officials..
+                    reports:
+                      type: string
+                      example: yet to be implemented
+        400:
+          description: Could not find the report
+        404:
+          description: Page not found
+  
+  /outbreaks/{id}:
+    get:
+      description: Obtain the report for a particular url
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The url of the page
+          schema:
+            type: string
+            example: https://www.cdc.gov/brucellosis/exposure/drug-resistant-brucellosis-linked-raw-milk.html
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: string
+                      example: https://www.cdc.gov/brucellosis/exposure/drug-resistant-brucellosis-linked-raw-milk.html
+                    date_of_publication:
+                      type: string
+                      example: 2019-02-09T00:00:00
+                      format: date-time
+                    headline:
+                      type: string
+                      example: Exposures to Drug  -Resistant Brucellosis Linked   to
+                        Raw Milk
+                    main_text:
+                      type: string
+                      example: The Centers for Disease Control and Prevention and state
+                        health officials..
+                    reports:
+                      type: string
+                      example: yet to be implemented
