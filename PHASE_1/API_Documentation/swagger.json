@@ -1,13 +1,13 @@
 openapi: 3.0.0
 servers: 
-  - url: 'https://app.swaggerhub.com/apis/SENG3011_Coders/scraper/1.0.0#/default/get_outbreaks'
+  - url: 'http://35.189.54.60:5000/'
 info:
   version: '1.0.0-oas3'
   title: Map Outbreaks
   description: This is a simple server to handle disease outbreaks in different areas of
     world.  
 paths:
-  /outbreaks:
+  /show:
     get:
       description: Get all the disease outbreaks
       parameters:
@@ -113,7 +113,7 @@ paths:
         404:
           description: Page not found
   
-  /outbreaks/{id}:
+  /show/{id}:
     get:
       description: Obtain the report for a particular url
       parameters:
