@@ -13,7 +13,7 @@ import urllib
 db = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="Password"
+  passwd=""
   #auth_plugin="caching_sha2_password"
 )
 

@@ -16,7 +16,7 @@ sample_input2 = json.dumps({
     'end_date': ""
 })
 sample_input = json.dumps({
-	'location': "Chicago",
+	'location': "Minnesota",
     'key_terms': "Salmonella , hedgehogs",
     'start_date': "2018-12-19T05:45:10",
     'end_date': "2019-05-21T05:45:10"
@@ -47,9 +47,9 @@ def case1():
 # Test2 check for correct input and output
 def case2():
 	print("Test case 2: Checking if the input is correct")
-	# print(sample_input)
 	r = requests.get(url, data=sample_input , headers=headers)
 	print("\t2.1 Check the status code")
+	print(json.loads(r.text))
 	assert(r.status_code == 200)
 	print("\tTest 2.1: Pass ")
 
