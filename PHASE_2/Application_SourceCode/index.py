@@ -15,7 +15,7 @@ api = Api(app)
 db = mysql.connector.connect(
         host="localhost",
         user="root",
-        passwd="Password"
+        passwd=""
     )
 cur = db.cursor()
 cur.execute('use cdcDB')
@@ -25,7 +25,7 @@ def locationCheck(place):
     for line in open("StatesUS.txt"):
         nLine = line.rstrip()
         place = make_string(place)
-        if place == nLine:
+        if place.lower() == nLine.lower():
             return True
 
     return False
@@ -35,7 +35,7 @@ def keyCheck(place):
     for line in open("diseasesList.txt"):
         nLine = line.rstrip()
         place = make_string(place)
-        if place == nLine:
+        if place.lower() == nLine.lower():
             return True
 
     return False
@@ -91,6 +91,8 @@ log = logging.getLogger(__name__)
 ns = api.namespace('outbreaktable', description='Returns the analysis after getting the data from CDC')
 
 @ns.route('/show/<string:start_date>/<string:end_date>/<string:location>/<string:key_terms>')
+@ns.route('/show/<string:start_date>/<string:end_date>//<string:key_terms>')
+@ns.route('/show/<string:start_date>/<string:end_date>/<string:location>')
 @ns.route('/show/<string:start_date>/<string:end_date>')
 @api.response(404, 'database not found.')
 @api.response(400, 'Invalid inputs.')
@@ -98,6 +100,7 @@ class show(Resource):
 
     @api.response(200, 'Data found and analysis shown.')
     def get(self,start_date,end_date, location="all",key_terms='all'):
+        print(start_date)
 
         #  if location != all then check the validity of the location
         if location != 'all':
