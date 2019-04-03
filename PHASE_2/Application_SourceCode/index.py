@@ -4,7 +4,7 @@ import datetime , re
 import json, os, time, decimal, re, subprocess,random,string
 from bottle import HTTPResponse
 from flask_api import status
-import logging 
+import logging
 
 import mysql.connector
 app=Flask(__name__)
@@ -15,7 +15,7 @@ api = Api(app)
 db = mysql.connector.connect(
         host="localhost",
         user="root",
-        passwd=""
+        passwd="Password"
     )
 cur = db.cursor()
 cur.execute('use cdcDB')
@@ -90,9 +90,16 @@ log = logging.getLogger(__name__)
 
 ns = api.namespace('outbreaktable', description='Returns the analysis after getting the data from CDC')
 
+@api.doc(params={'start_date': 'start of period of interest. example-> 2019-02-15T03:00:00'})
+@api.doc(params={'end_date': 'end of period of interest. example: 2019-02-25T03:00:00'})
+
 @ns.route('/show/<string:start_date>/<string:end_date>/<string:location>/<string:key_terms>')
+<<<<<<< HEAD
 @ns.route('/show/<string:start_date>/<string:end_date>//<string:key_terms>')
 @ns.route('/show/<string:start_date>/<string:end_date>/<string:location>')
+=======
+
+>>>>>>> a0f3b45b28beddbe37df3de070e3b5d354ea2f94
 @ns.route('/show/<string:start_date>/<string:end_date>')
 @api.response(404, 'database not found.')
 @api.response(400, 'Invalid inputs.')
@@ -200,7 +207,7 @@ class show(Resource):
                     isIt = True
 
             if isIt is False:
-                continue 
+                continue
 
             report = {
                         'disease': row[9],
@@ -209,16 +216,16 @@ class show(Resource):
                         'hospitalised' : row[6],
                         'deaths' : row[7],
                         'locations' : row[8]
-            }         
+            }
             item ={
                 "url": row[1],
                 "headline": row[2],
                 "date_of_publication": row[3],
                 "main_text": row[4],
                 'reports' : [report]
-                   
+
             }
-            
+
             # Fill dictionary with items
             # item = json.dumps(item)
             # data = data + str(item)
@@ -234,7 +241,7 @@ class show(Resource):
 
         sample_result = data
         return sample_result , status.HTTP_200_OK
-        
+
 # this is the main file
 #########################################################################
 if __name__ == '__main__':
