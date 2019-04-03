@@ -207,17 +207,24 @@ paths:
         404:
           description: Page not found
   
-  /show/{id}:
+  /outbreaktable/show/{start_date}/{end_date}::
     get:
       description: Obtain the report for a particular url
       parameters:
         - in: path
-          name: id
+          name: start_date
           required: true
-          description: The url of the page
+          description: The start date of the page
           schema:
             type: string
-            example: https://www.cdc.gov/brucellosis/exposure/drug-resistant-brucellosis-linked-raw-milk.html
+            example: 2018-03-19T05:23:19
+        - in: path
+          name: end_date
+          required: true
+          description: The end date of the page
+          schema:
+            type: string
+            example: 2018-02-19T05:23:16
       responses:
         200:
           description: Success
@@ -232,7 +239,7 @@ paths:
                       example: https://www.cdc.gov/brucellosis/exposure/drug-resistant-brucellosis-linked-raw-milk.html
                     date_of_publication:
                       type: string
-                      example: 2017-02-09T00:00:00
+                      example: 2018-03-19T05:23:19
                       format: date-time
                     headline:
                       type: string
