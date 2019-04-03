@@ -1,42 +1,136 @@
 openapi: 3.0.0
 servers: 
-  - url: 'http://35.189.54.60:5000/'
+  - url: https://virtserver.swaggerhub.com/SENG3011_Coders/swagger/1.0.0-oas3
+# Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/SENG3011_Coders/swagger/1.0.0-oas3
 info:
   version: '1.0.0-oas3'
   title: Map Outbreaks
-  description: This is a simple server to handle disease outbreaks in different areas of
+  description: This is a simple server to handle disease outbreaks in different areas of the
     world.  
 paths:
-  /show:
+  /outbreaktable/show/{start_date}/{end_date}:
     get:
       description: Get all the disease outbreaks
       parameters:
-        - name: startDate
-          in: query
-          description: Get all the outbreaks between start date and end date
+        - name: start_date
+          in: path
+          description: The start of the period of interest as a yyyy-MM-ddTHH:mm:ss string.
           schema:
             type: string
             example: 2017-07-21T17:32:28
             format: date-time
           required: true
-        - name: endDate
-          in: query
-          description: Get all the outbreaks between start date and end date
+        - name: end_date
+          in: path
+          description: The end of the period of interest as a yyyy-MM-ddTHH:mm:ss string.
           schema:
             type: string
             format: date-time
             example: 2017-08-21T17:32:28
           required: true
-        - name: keyWords
-          in: query
-          description: Search the reports with the keywords
+      responses:
+        200:
+          description: Succesfully found the report
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: string
+                      example: https://www.cdc.gov/brucellosis/exposure/drug-resistant-brucellosis-linked-raw-milk.html
+                    date_of_publication:
+                      type: string
+                      example: 2019-02-09T3:00:00
+                      format: date-time
+                    headline:
+                      type: string
+                      example: Exposures to Drug-Resistant Brucellosis Linked   to
+                        Raw Milk
+                    main_text:
+                      type: string
+                      example: The Centers for Disease Control and Prevention and state
+                        health officials..
+                    reports:
+                      type: object
+                      required:
+                      - disease
+                      - syndrome
+                      - reported_events
+                      - Comment
+                      properties:
+                        disease:
+                          type: string
+                          example: Ebola
+                        syndrome:
+                          type: string
+                          example: null
+                        reported_events:
+                          type: object
+                          required:
+                          - type
+                          - date
+                          - location
+                          - number_affected
+                          properties:
+                            type:
+                              type: string
+                              example: hospitalized
+                            date:
+                              type: string
+                              example: 2018-12-01Txx:xx:xx to 2018-12-10Txx:xx:xx
+                            location:
+                              type: object
+                              required:
+                              - genonames-id
+                              properties:
+                                geonames-id:
+                                  type: integer
+                                  example: 1566083
+                            number_affected:
+                              type: integer
+                              example: 2
+                        Comment:
+                          type: string
+                          example: This outbreak is being contained
+              
+        400:
+          description: Could not find the report
+        404:
+          description: Page not found
+  /outbreaktable/show/{start_date}/{end_date}/{location}/{key_terms}:
+    get:
+      description: Get all the disease outbreaks
+      parameters:
+        - name: start_date
+          in: path
+          description: The start of the period of interest as a yyyy-MM-ddTHH:mm:ss string.
+          schema:
+            type: string
+            example: 2017-07-21T17:32:28
+            format: date-time
+          required: true
+        - name: end_date
+          in: path
+          description: The end of the period of interest as a yyyy-MM-ddTHH:mm:ss string.
+          schema:
+            type: string
+            format: date-time
+            example: 2017-08-21T17:32:28
+          required: true
+        - name: key_terms
+          in: path
+          description: Search the reports with the keywords like 'measles'
           schema:
             type: string
             example: measles
           required: true
         - name: location
-          in: query
-          description: Search the reports in a particular             location
+          in: path
+          description: Search the reports in a particular location
           schema:
             type: string
             example: California
@@ -59,7 +153,7 @@ paths:
                       format: date-time
                     headline:
                       type: string
-                      example: Exposures to Drug  -Resistant Brucellosis Linked   to
+                      example: Exposures to Drug-Resistant Brucellosis Linked   to
                         Raw Milk
                     main_text:
                       type: string
@@ -138,7 +232,7 @@ paths:
                       example: https://www.cdc.gov/brucellosis/exposure/drug-resistant-brucellosis-linked-raw-milk.html
                     date_of_publication:
                       type: string
-                      example: 2019-02-09T00:00:00
+                      example: 2017-02-09T00:00:00
                       format: date-time
                     headline:
                       type: string
