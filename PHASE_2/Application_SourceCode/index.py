@@ -21,6 +21,34 @@ cur = db.cursor()
 cur.execute('use cdcDB')
 
 
+def locationCheck(place):
+    for line in open("StatesUS.txt"):
+        nLine = line.rstrip()
+        place = make_string(place)
+        if place == nLine:
+            return True
+
+    return False
+
+def keyCheck(place):
+
+    for line in open("diseasesList.txt"):
+        nLine = line.rstrip()
+        place = make_string(place)
+        if place == nLine:
+            return True
+
+    return False
+
+def checkDate(dates):
+    dates = make_string(dates)
+
+    if re.match('[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}T[0-9]{2}:[0-9]{2}:[0-9]{2}',dates) is None :
+        print("---"+dates)
+        return False
+    return True
+
+
 
 
 # function used to split a date strting
@@ -71,6 +99,39 @@ class show(Resource):
     @api.response(200, 'Data found and analysis shown.')
     def get(self,start_date,end_date, location="all",key_terms='all'):
 
+        #  if location != all then check the validity of the location
+        if location != 'all':
+            loc1 = re.split(',', location)
+            for i in loc1:
+                if locationCheck(i) is False:
+                    res = {
+                        "details": "location incorrect"
+                    }
+                    return res, status.HTTP_400_BAD_REQUEST
+
+
+        if key_terms != 'all':
+            key = re.split(',',key_terms)
+            for i in key:
+                if keyCheck(i) is False:
+                    res = {
+                        "details": "key word incorrect"
+                    }
+                    return res, status.HTTP_400_BAD_REQUEST
+
+        if checkDate(start_date) is False :
+            res = {
+                 "details": "date incorrect",
+                 "correct_example" : "2019-05-19T16:45:38"
+            }
+            return res, status.HTTP_400_BAD_REQUEST
+        if checkDate(end_date) is False :
+            res = {
+                 "details": "date incorrect",
+                 "correct_example" : "2019-05-19T16:45:38"
+            }
+            return res, status.HTTP_400_BAD_REQUEST
+        print(end_date)
 
          # splitted the date string
         s_year, s_month ,s_day, s_hour, s_min , s_sec = getDateInParts(start_date)
