@@ -15,7 +15,7 @@ api = Api(app)
 db = mysql.connector.connect(
         host="localhost",
         user="root",
-        passwd=""
+        passwd="Password"
     )
 cur = db.cursor()
 cur.execute('use cdcDB')
