@@ -25,16 +25,19 @@ cur.execute('use cdcDB')
 
 # function used to split a date strting
 def getDateInParts(inputs):
-    s_year = re.search('^[0-9]{4}-' , inputs).group()
+    inputs = make_string(inputs)
+    if re.search('^x', inputs):
+        return 1769,1 ,1,0,0,0
+    s_year = re.search('^\w{4}-' , inputs).group()
     inputs = inputs.replace(s_year, "")
-    s_year = re.search('^[0-9]{4}' , s_year).group()
-    s_month = re.search('^[0-9]{2}-', inputs).group()
+    s_year = re.search('^\w{4}' , s_year).group()
+    s_month = re.search('^\w{2}-', inputs).group()
     inputs = inputs.replace(s_month, "")
-    s_month = re.search('^[0-9]{2}', s_month).group()
-    s_date = re.search('[0-9]{2}T', inputs).group()
+    s_month = re.search('^\w{2}', s_month).group()
+    s_date = re.search('\w{2}T', inputs).group()
     inputs = inputs.replace(s_date, "")
-    s_date = re.search('[0-9]{2}', s_date).group()
-    s_hour = re.search('^\w\w:', inputs).group()
+    s_date = re.search('\w{2}', s_date).group()
+    s_hour = re.search('^\w{1,2}:', inputs).group()
     inputs = inputs.replace(s_hour, "")
     s_hour = s_hour.replace(':', '')
     s_min = re.search('^\w\w', inputs).group()
@@ -48,36 +51,26 @@ def getDateInParts(inputs):
     return s_year, s_month ,s_date, s_hour, s_min , s_sec
 
 
+def make_string(words):
+    s = ""
+    for i in words:
+        s = s+ i
+    return s
+
 
 log = logging.getLogger(__name__)
 
 ns = api.namespace('outbreaktable', description='Returns the analysis after getting the data from CDC')
 
-@ns.route('/show/<string:location>,<string:key_terms>,<string:start_date>,<string:end_date>')
+@ns.route('/show/<string:start_date>/<string:end_date>/<string:location>/<string:key_terms>')
+@ns.route('/show/<string:start_date>/<string:end_date>')
 @api.response(404, 'database not found.')
 @api.response(400, 'Invalid inputs.')
 class show(Resource):
 
     @api.response(200, 'Data found and analysis shown.')
-    def get(self,location,key_terms,start_date,end_date):
+    def get(self,start_date,end_date, location="all",key_terms='all'):
 
-        if location == "" and key_terms is "":
-            res = {
-                'message': "input incorrect"
-                }
-            return jsonify(res),status.HTTP_400_BAD_REQUEST
-
-        # checking if the format of the date is correct
-        prog = re.compile('^%d{4}.%d{2}.%d{2}T%d:{2}:%x{2}:%x{2}$')
-        input = False
-        if prog.match(start_date) and prog.match(end_date):
-                input = True;
-
-        if input is False:
-            res = {
-                'message': "input incorrect"
-                }
-            return res,status.HTTP_400_BAD_REQUEST
 
          # splitted the date string
         s_year, s_month ,s_day, s_hour, s_min , s_sec = getDateInParts(start_date)
@@ -90,17 +83,94 @@ class show(Resource):
         # Checking is the start_date is less than the end_date
         if s_date > e_date :
             res = {
-            'details':"incorrect input"
+            'details':"incorrect inputs"
             }
             return res , status.HTTP_400_BAD_REQUEST
 
+         # Querry the database for all outputs
+        querry = "SELECT * from outbreakTable"
+        cur.execute(querry)
+        result_rows = cur.fetchall()
+
+        data=[]
+        for row in result_rows:
+            # For each word in key term check if it is in title/headline
+
+            #  we need to split the key terms and store it in the array
+            key_terms = make_string(key_terms)
+            if key_terms == 'all':
+                key_terms1 = ""
+            else :
+                key_terms1 = re.split(',', key_terms)
+
+            isSubstring = True;
+            for word in key_terms1:
+                # If term not substring of headline break
+                if word.lower() not in row[2].lower():
+                    isSubstring = False;
+                    break
+
+            # If not all keywords are substring of headline goto next row
+            if isSubstring == False:
+                continue
+
+            g_year, g_month ,g_day, g_hour, g_min , g_sec = getDateInParts(row[3])
+            if (g_hour == "xx"):
+                g_hour = 0
+                g_min = 0
+                g_sec = 0
+            givenDate = datetime.datetime(int(g_year), int(g_month), int(g_day), int(g_hour), int(g_min), int(g_sec))
+
+            if (givenDate < s_date or givenDate > e_date):
+                continue
+            location = make_string(location)
+            if location == 'all':
+                location1 = ""
+            else:
+                location1 = re.split(',', location)
+            isIt = False
+            if location1 == "":
+                isIt = True
+            for i in location1:
+                if i.lower() in row[8].lower():
+                    isIt = True
+
+            if isIt is False:
+                continue 
+
+            report = {
+                        'disease': row[9],
+                        'syndrome': row[10],
+                        'reported events': row[5],
+                        'hospitalised' : row[6],
+                        'deaths' : row[7],
+                        'locations' : row[8]
+            }         
+            item ={
+                "url": row[1],
+                "headline": row[2],
+                "date_of_publication": row[3],
+                "main_text": row[4],
+                'reports' : [report]
+                   
+            }
+            
+            # Fill dictionary with items
+            # item = json.dumps(item)
+            # data = data + str(item)
+            data.append(item)
+            print(data)
+
+
+        datax = []
+        if data == datax:
+            return {
+                "details" : "data not found"
+            }, status.HTTP_404_NOT_FOUND
+
+        sample_result = data
+        return sample_result , status.HTTP_200_OK
         
-
-        return jsonify({
-                'message' : location,
-                'massage' : start_date
-        })
-
 # this is the main file
 #########################################################################
 if __name__ == '__main__':

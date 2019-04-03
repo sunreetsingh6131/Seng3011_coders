@@ -8,7 +8,6 @@ import flask
 
 
 # This script is going to be used to check is the API is providing suitable and correct results.
-headers = {'content-type': 'application/json'}
 sample_input2 = json.dumps({
 	'location': "",
     'key_terms': "",
@@ -29,7 +28,7 @@ sample_input3 = json.dumps({
     'end_date': "2019-05-21T05:45:10"
 })
 
-url = 'http://0.0.0.0:5000/show'
+url = 'http://0.0.0.0:5000/outbreaktable/show/'
 
 
 
@@ -37,7 +36,8 @@ url = 'http://0.0.0.0:5000/show'
 def case1():
 	print("Test Case 1: Checking for a sample wrong input")
 	# print(sample_input2)
-	r = requests.get(url, data=sample_input2 , headers=headers)
+	querry_string = """/""/""/"""
+	r = requests.get(url+querry_string)
 	# print(r.status_code)
 	assert(r.status_code == 400)
 	# print(r.text)
