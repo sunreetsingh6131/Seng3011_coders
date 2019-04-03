@@ -1,4 +1,4 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, render_template
 from flask_restplus import Api, Resource , fields
 import datetime , re
 import json, os, time, decimal, re, subprocess,random,string
@@ -36,6 +36,9 @@ def getDateInParts(inputs):
     return s_year, s_date ,s_month, s_hour, s_min , s_sec
 
 
+@app.route('/')
+def index():
+    return render_template('https://swagger.io/resources/webinars/design-apis-with-openapi-specification/')
 
 @api.route('/show')
 class show(Resource):

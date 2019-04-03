@@ -90,7 +90,6 @@ def case2():
 def case3():
 	print("Test Case 3: Check if input correct but no output {status code 404}")
 	r = requests.get(url, data=sample_input3 , headers=headers)
-	print(r.text)
 
 	assert(r.status_code == 404)
 	print("Test 3: Pass")
