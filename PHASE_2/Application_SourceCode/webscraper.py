@@ -277,10 +277,10 @@ for outbreaks in bulletPoints.findAll('li'):
     hospitalizedAtt = hospitalised
     deathsAtt = deaths
     #locationAtt = locations
-    locationAtt = " ,".join(locations)
-    diseasesAtt = " ,".join(diseases)
+    locationAtt = ", ".join(locations)
+    diseasesAtt = ", ".join(diseases)
 
-    syndromeAtt = " ,".join(syndromes)
+    syndromeAtt = ", ".join(syndromes)
 
     cur.execute('insert into outbreakTable (url, headline, date, details, reported_cases, hospitalised_cases, deaths, location, disease, syndrome) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(urlAtt,headlineAtt,dopAtt, main_textAtt, reported_casesAtt, hospitalizedAtt, deathsAtt, locationAtt, diseasesAtt, syndromeAtt))
     db.commit()
