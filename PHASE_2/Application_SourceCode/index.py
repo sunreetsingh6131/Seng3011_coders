@@ -36,7 +36,7 @@ def locationCheck(place):
 
 def keyCheck(place):
 
-    for line in open("diseasesList.txt"):
+    for line in open("keysearchterms.txt"):
         nLine = line.rstrip()
         place = make_string(place)
         if place.lower() == nLine.lower():
@@ -133,14 +133,19 @@ class show(Resource):
         key_terms = request.args.get('keyterm') #if key doesn't exist, returns None
         location = request.args.get('location') #if key doesn't exist, returns a 400, bad request error
         start_date = request.args.get('start_date')
+        # if start_date == None:
+        #     res = {
+        #          "details": "Field can't be left empty",
+        #     }
+        #     return res, status.HTTP_400_BAD_REQUEST
         end_date = request.args.get('end_date')
+        # if end_date == None:
+        #     res = {
+        #          "details": "Field can't be left empty",
+        #     }
+        #     return res, status.HTTP_400_BAD_REQUEST
         #  if location != all then check the validity of the location
 
-
-        print(key_terms)
-        print(location)
-        print(start_date)
-        print(end_date)
         if location != None:
             #print("here")
             if location != 'all':
@@ -155,11 +160,11 @@ class show(Resource):
 
         if key_terms != None:
             if key_terms != 'all':
-                key = re.split(',',key_terms)
+                key = re.split(', ',key_terms)
                 for i in key:
                     if keyCheck(i) is False:
                         res = {
-                            "details": "key word incorrect"
+                            "details": "keyterms incorrect"
                         }
                         return res, status.HTTP_400_BAD_REQUEST
 
@@ -185,16 +190,29 @@ class show(Resource):
         if start_date !=None:
             s_year, s_month ,s_day, s_hour, s_min , s_sec = getDateInParts(start_date)
             s_date = datetime.datetime(int(s_year), int(s_month), int(s_day), int(s_hour), int(s_min), int(s_sec))
+            cs_date= datetime.datetime(int(s_year), int(s_month), int(s_day))
 
         if end_date!=None:
             e_year, e_month ,e_day, e_hour, e_min , e_sec = getDateInParts(end_date)
             e_date = datetime.datetime(int(e_year), int(e_month), int(e_day), int(e_hour), int(e_min), int(e_sec))
+            ce_date = datetime.datetime(int(e_year), int(e_month), int(e_day))
 
         # Checking is the start_date is less than the end_date
+        #console.log(e_date)
+
+        # print(s_date)
+        # print(e_date)
+
+        # if start_date == None or end_date == None:
+        #     res = {
+        #          "details": "date fields can't be left empty",
+        #     }
+        #     return res , status.HTTP_400_BAD_REQUEST
+
         if start_date !=None or end_date != None:
-            if s_date > e_date :
+            if cs_date > ce_date :
                 res = {
-                'details':"incorrect inputs"
+                'details':"invalid start date and end date"
                 }
                 return res , status.HTTP_400_BAD_REQUEST
 
@@ -214,14 +232,16 @@ class show(Resource):
                     #print('here')
                     key_terms1 = ""
                 else :
-                    key_terms1 = re.split(',', key_terms)
+                    key_terms1 = re.split(', ', key_terms)
                     #print(key_terms1)
 
                 isSubstring = False;
                 for word in key_terms1:
-                    #print(word)
-                    if word.lower() in row[2].lower():
+                    # print("my input ->"+word)
+                    # print("row in database-> "+row[11])
+                    if word.lower() in row[11].lower():
                         isSubstring = True;
+                        # print("yesyesyes")
                         break #break
 
                 # code below unreachable not using keyterms always.
@@ -256,13 +276,73 @@ class show(Resource):
                 if isIt is False:
                     continue
 
+            # type1 = None
+            # type2 = None
+            # type3 = None
+
+            reportedArr = []
+
+            type = [None, None, None]
+            no = [0, 0, 0]
+            if row[5] != 'unknown':
+                if int(row[5]) > 0:
+                    type[0] = "infected"
+                    no[0] = row[5]
+            if row[6] != 'unknown':
+                if int(row[6]) > 0:
+                    type[1] = "hospitalised"
+                    no[1] = row[6]
+            if row[7] != 'unknown':
+                if int(row[7]) > 0:
+                    type[2] = "death"
+                    no[2] = row[7]
+
+            if row[8] != None:
+                if type[0] == None and type[1] == None and type[2] == None:
+                    reported = {
+                        'type': "presence",
+                        'date': row[3],
+                        'location': row[8],
+                        'number_affected': "unknown"
+                    }
+                    reportedArr.append(reported)
+
+
+
+
+            # 'hospitalised' : row[6],
+            # 'deaths' : row[7],
+            # 'locations' : row[8]
+
+
+            i = 0
+            while i < 3:
+                if type[i] != None:
+                    reported = {
+                        'type': type[i],
+                        'date': row[3],
+                        'location': row[8],
+                        'number_affected': no[i]
+                    }
+                    reportedArr.append(reported)
+                i=i+1
+
+
+            if len(reportedArr) == 0:
+                reported = {
+                    'type': "",
+                    'date': "",
+                    'location': "",
+                    'number_affected': ""
+                }
+                reportedArr.append(reported)
+
+
             report = {
                         'disease': row[9],
                         'syndrome': row[10],
-                        'reported_events': row[5],
-                        'hospitalised' : row[6],
-                        'deaths' : row[7],
-                        'locations' : row[8]
+                        'reported_events': reportedArr,
+                        'comments' : "null"
             }
             item ={
                 "url": row[1],
@@ -270,6 +350,7 @@ class show(Resource):
                 "date_of_publication": row[3],
                 "main_text": row[4],
                 'reports' : [report]
+
 
             }
 

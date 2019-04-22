@@ -2,7 +2,7 @@
 
 import socket
 import sys
-from newsapi import NewsApiClient
+#from newsapi import NewsApiClient
 import mysql.connector
 from socket import *
 import argparse

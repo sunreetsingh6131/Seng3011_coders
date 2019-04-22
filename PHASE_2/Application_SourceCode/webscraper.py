@@ -30,7 +30,7 @@ cur.execute('use cdcDB')
 #     cur.execute('ALTER TABLE outbreakTable AUTO_INCREMENT = 1')
 # else:
 cur.execute('DROP TABLE IF EXISTS `outbreakTable`')
-table ='create table if not exists outbreakTable(id int NOT NULL AUTO_INCREMENT, url varchar(300), headline varchar(200), date varchar(20), details varchar(1000), reported_cases varchar(20), hospitalised_cases varchar(20), deaths varchar(20), location varchar(500), disease varchar(50), syndrome varchar(50), PRIMARY KEY (id))'
+table ='create table if not exists outbreakTable(id int NOT NULL AUTO_INCREMENT, url varchar(300), headline varchar(200), date varchar(20), details varchar(1000), reported_cases varchar(20), hospitalised_cases varchar(20), deaths varchar(20), location varchar(500), disease varchar(50), syndrome varchar(50), keyterms varchar(100), PRIMARY KEY (id))'
 cur.execute(table)
 cur.execute('ALTER TABLE outbreakTable AUTO_INCREMENT = 1')
 
@@ -180,6 +180,20 @@ def syndromeCheck(fetchPage):
     #print sList
     return sList
 
+
+def termsCheck(fetchPage):
+    page = fetchPage.text
+    sList = []
+    for line in open("keysearchterms.txt"):
+        nLine = line.rstrip()
+        myRegex = r""+re.escape(nLine)+""
+        matchObj = re.search(myRegex, page, re.M|re.I)
+        if matchObj:
+            sList.append(nLine)
+
+    #print sList
+    return sList
+
 def diseasesCheck(fetchPage):
     page = fetchPage.text
     sList = []
@@ -266,6 +280,9 @@ for outbreaks in bulletPoints.findAll('li'):
 
             #syndrome
             syndromes = syndromeCheck(newPageContent)
+
+            #terms
+            keytermsList = termsCheck(newPageContent)
     else:
         url = "unknown"
 
@@ -276,13 +293,17 @@ for outbreaks in bulletPoints.findAll('li'):
     reported_casesAtt = reported_case
     hospitalizedAtt = hospitalised
     deathsAtt = deaths
+
     #locationAtt = locations
     locationAtt = ", ".join(locations)
     diseasesAtt = ", ".join(diseases)
 
     syndromeAtt = ", ".join(syndromes)
+    ktAtt = ", ".join(keytermsList)
 
-    cur.execute('insert into outbreakTable (url, headline, date, details, reported_cases, hospitalised_cases, deaths, location, disease, syndrome) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(urlAtt,headlineAtt,dopAtt, main_textAtt, reported_casesAtt, hospitalizedAtt, deathsAtt, locationAtt, diseasesAtt, syndromeAtt))
+    print ktAtt
+
+    cur.execute('insert into outbreakTable (url, headline, date, details, reported_cases, hospitalised_cases, deaths, location, disease, syndrome, keyterms) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(urlAtt,headlineAtt,dopAtt, main_textAtt, reported_casesAtt, hospitalizedAtt, deathsAtt, locationAtt, diseasesAtt, syndromeAtt, ktAtt))
     db.commit()
     # outbreakObject = {
     #

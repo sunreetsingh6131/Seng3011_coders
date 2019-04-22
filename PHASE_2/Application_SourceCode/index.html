@@ -18,7 +18,7 @@ body {margin:0;height:0;}
 }
 
 .sidenav {
-  height: 40%;
+  height: 50%;
   width: 0;
   left: 90;
   top: 40;
@@ -114,6 +114,13 @@ body {margin:0;height:0;}
   to {opacity:1 ;}
 }
 
+.butpos{
+  position:fixed;
+  left: 1%;
+  bottom: 2%;
+
+}
+
 .bottomright {
   word-wrap: break-word;
   position: fixed;
@@ -127,12 +134,13 @@ body {margin:0;height:0;}
   bottom: 0;
   right: 0;
   width: 320px;
-  border: 2px solid #4CAF50;
+  border: 4px solid Steelblue;
 }
 
 .navbar {
     margin-bottom: 0;
     border-radius: 0;
+    background-color: Steelblue;
 }
 
 .icon-bar {
@@ -141,6 +149,10 @@ body {margin:0;height:0;}
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
+}
+
+ul{
+  background-color: Steelblue;
 }
 
 .icon-bar a {
@@ -206,7 +218,9 @@ body {margin:0;height:0;}
     function panTo(coords){
        earth.panTo(coords);
     }
-
+    function flyToAmerica(){
+       earth.panInsideBounds([[41,-98],[41,-98]],{heading: 0, tilt: 0, duration: 2});
+    }
     function initShow(){
       fetch('http://0.0.0.0:5000/show', {
       //fetch('https://cors-anywhere.herokuapp.com/http://0.0.0.0:5000/outbreaktable/show/2019-02-15T03:00:00/2019-02-25T03:00:00', {
@@ -264,13 +278,13 @@ body {margin:0;height:0;}
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">MapOutbreaks</a>
+            <a class="navbar-brand" href="#"><font size="4" color="white">MapOutbreaks</a></font>
         </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav">
-            <li><a href="#">Home</a></li>
-            <li><a onclick="myFunction()">About</a></li>
-            <li><a onclick=" myFunctionContactUs()">Contact Us</a></li>
+    <div class="collapse navbar-collapse" id="myNavbar" background-color="Steelblue">
+        <ul class="nav navbar-nav" background-color="Steelblue">
+            <li><a href="#"><font size="4" color="white">Home</a></li></font>
+            <li><a onclick="myFunction()"><font size="4" color="white">About</a></li></font>
+            <li><a onclick=" myFunctionContactUs()"><font size="4" color="white">Contact Us</a></li></font>
         </ul>
     <span style="font-size:20px;float:right;margin-top:1%;color:white;cursor:pointer" onclick="openNav()">&#9776;search</span>
     </div>
@@ -280,21 +294,26 @@ body {margin:0;height:0;}
 <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   <div class="search-container" >
-    <br><label for="startDate"></label><input id="startDate" placeholder="Enter Start Date" type="datetime-local"/ value="2011-01-13"/></br>
-    <!-- <br><input type="text" id="startDate" placeholder="Enter Start Date" value=""><i class="fa fa-calendar" style="color:white;font-size:25px"></i></br> -->
+    <!-- <p id="error"><font size="3" color="red">Start date should be greater than end date</p></font> -->
+    <input type="text" id="startDate" placeholder="Enter Start Date" value=""><i class="fa fa-calendar" style="color:white;font-size:25px"></i><br>
     <br><input type="text" id="endDate"  placeholder="Enter End Date" value=""><i class="fa fa-calendar" style="color:white;font-size:25px"></i></br>
     <br><input type="text" id="location"  placeholder="Enter Location" value=""><i class="fa fa-plane" style="color:blue;font-size:25px"></i></br>
     <br><input type="text" id="keyterm"  placeholder="Enter diseases" value=""><i class="fa fa-ambulance" style="color:red;font-size:25px"></i></br>
     <br><button onclick="getInput()"><i class="fa fa-search">Search</button></i></br>
+    <br><p id="error1"><font size="3" color="red"></font></p>
+    <!-- <br><input type="button" value="Go to America" onclick="flyToAmerica()"></br> -->
    </div>
 
 </div>
 
 <div class="box_and">
     <center><font size="5" color="red"> Alerts and Watches</font></center>
-    <marquee height="100%" direction = "up" scrollamount="3" onmousedown="this.stop();" onmouseup="this.start();"><font size="4" color="blue"><p id="result"></p></font></marquee>
+    <marquee height="100%" direction = "up" scrollamount="3" onmousedown="this.stop();" onmouseup="this.start();"><font size="4" color="white"><p id="result"></p></font></marquee>
 </div>
 
+<div class="butpos">
+  <button style="font-size:30px"><i class="fa fa-map-marker" onclick="flyToAmerica()"></i></button>
+</div>
 <div class="icon-bar">
         <div class="popup">
           <a onclick="myFunctionNews()" class="google"><i class="fa fa-google"></a></i>
@@ -334,6 +353,7 @@ function myFunctionNews() {
 
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
+  // document.getElementById("error1").innerHTML = "";
 }
 
 function closeNav() {
@@ -400,8 +420,8 @@ function locs(place){
   locsAdd['wisconsin'] = { long: 44, lat: -89};
   locsAdd['wyoming'] = { long: 43, lat: -107};
 
+  var arr = []
   if (place in locsAdd){     // modify cat key here
-    var arr = []
     arr.push(locsAdd[place].long);
     arr.push(locsAdd[place].lat);
   }
@@ -409,20 +429,12 @@ function locs(place){
 }
 
 function getInput() {
+  document.getElementById("error1").innerHTML = "";
   var x = document.getElementById("startDate").value;
   var y = document.getElementById("endDate").value;
   var z = document.getElementById("location").value;
   var a = document.getElementById("keyterm").value;
 
-  console.log(x)
-  console.log(y)
-  console.log(z)
-  console.log(a)
-
-  var random = locs(z);
-  console.log(random)
-
-  console.log('here')
 
   //all parameters
   if (x!="" && y!="" && a!="" && z!=""){
@@ -438,14 +450,50 @@ function getInput() {
              'Content-Type': 'application/json'
          }
       })
-      .then((resp) => resp.json())
+      .then(function(response) {
+         if (!response.ok) {
+             var x =  Error(response.status);
+             //alert(x)
+             if (x == "Error: 404"){
+               document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
+               //alert("No result found.")
+               return
+             }
+             else if (x == "Error: 400"){
+               document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
+               //alert("Incorrect input")
+               return
+             }
+         }
+         //else{
+         return response.json();
+       //  }
+       })
       .then(function(data) {
-         console.log(data)
-
-         markLocationsRemove(locsARR);
-         markLocationsSearch(data, earth, z)
          //markLocations(data, earth)
-         //document.getElementById('result').innerHTML = `${data.url}`;
+         //initialize2();
+         markLocationsRemove(locsARR);
+         markLocationsSearch(data, earth, z);
+         // var len = Object.keys(data).length;
+         // console.log(Object.keys(data).length);
+         // for (let i = 0; i<len; i++){
+         //   markLocations(data[i], earth);
+         //   //markLocationsRemove(data[i], earth);
+         //   //earth.setMap(null);
+         // }
+
+
+         // make list
+         //markLocationsSearch(data, earth, z);
+         // if (data.status != 404){
+         //   markLocationsRemove(locsARR);
+         //   markLocationsSearch(data.json(), earth, z);
+         // }
+         // else{
+         //   alert("ERROR404: No result found");
+         // }
+         //console.log(data)
+       //  document.getElementById('result').innerHTML = `${data.url}`;
       })
 
       //markLocationsSearch("data.location", earth)
@@ -467,12 +515,38 @@ function getInput() {
             'Content-Type': 'application/json'
         }
      })
-     .then((resp) => resp.json())
+     .then(function(response) {
+        if (!response.ok) {
+            var x =  Error(response.status);
+            //alert(x)
+            if (x == "Error: 404"){
+              document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
+              //alert("No result found.")
+              return
+            }
+            else if (x == "Error: 400"){
+              document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
+              //alert("Incorrect input")
+              return
+            }
+        }
+        //else{
+        return response.json();
+      //  }
+      })
+     //.then((resp) => resp.json())
      .then(function(data) {
         //markLocations(data, earth)
         //initialize2();
         markLocationsRemove(locsARR);
-        markLocationsSearch(data, earth, z)
+        markLocationsSearch(data, earth, z);
+        // if (data.status != 404){
+        //   markLocationsRemove(locsARR);
+        //   markLocationsSearch(data.json(), earth, z);
+        // }
+        // else{
+        //   alert("ERROR404: No result found");
+        // }
         //console.log(data)
       //  document.getElementById('result').innerHTML = `${data.url}`;
      })
@@ -495,14 +569,52 @@ function getInput() {
             'Content-Type': 'application/json'
         }
      })
-     .then((resp) => resp.json())
-     .then(function(data) {
-        console.log(data)
-        //initialize2();
-        markLocationsRemove(locsARR);
-        markLocationsSearch(data, earth, z)
+     .then(function(response) {
+        if (!response.ok) {
+            var x =  Error(response.status);
+            //alert(x)
+            if (x == "Error: 404"){
+              document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
+              //alert("No result found.")
+              return
+            }
+            else if (x == "Error: 400"){
+              document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
+              //alert("Incorrect input")
+              return
+            }
+        }
+        //else{
+        return response.json();
+      //  }
+      })
+      .then(function(data) {
         //markLocations(data, earth)
-        //document.getElementById('result').innerHTML = `${data.url}`;
+        //initialize2();
+
+        if(data == null){
+          return
+        }
+        //console.log(data)
+        markLocationsRemove(locsARR);
+        var len = Object.keys(data).length;
+        console.log(Object.keys(data).length);
+        for (let i = 0; i<len; i++){
+          markLocations(data[i], earth);
+          //markLocationsRemove(data[i], earth);
+          //earth.setMap(null);
+        }
+        //markLocations(data, earth)
+        //markLocationsSearch(data, earth, z);
+        // if (data.status != 404){
+        //   markLocationsRemove(locsARR);
+        //   markLocationsSearch(data.json(), earth, z);
+        // }
+        // else{
+        //   alert("ERROR404: No result found");
+        // }
+        //console.log(data)
+      //  document.getElementById('result').innerHTML = `${data.url}`;
      })
      //markLocationsSearch("data.location", earth)
   }
@@ -524,32 +636,90 @@ function getInput() {
             'Content-Type': 'application/json'
         }
     })
-    .then((resp) => resp.json())
+    .then(function(response) {
+       if (!response.ok) {
+           var x =  Error(response.status);
+           //alert(x)
+           if (x == "Error: 404"){
+             document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
+             //alert("No result found.")
+             return
+           }
+           else if (x == "Error: 400"){
+             document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
+             //alert("Incorrect input")
+             return
+           }
+       }
+       //else{
+       return response.json();
+     //  }
+   })
     .then(function(data) {
-        console.log(data)
-        //initialize2();
-        markLocationsRemove(locsARR);
-        markLocationsSearch(data, earth, z)
-        //markLocations(data, earth)
-
-      //  document.getElementById('result').innerHTML = `${data.url}`;
-     })
+       //markLocations(data, earth)
+       //initialize2();
+       markLocationsRemove(locsARR);
+       var len = Object.keys(data).length;
+       console.log(Object.keys(data).length);
+       for (let i = 0; i<len; i++){
+         markLocations(data[i], earth);
+         //markLocationsRemove(data[i], earth);
+         //earth.setMap(null);
+       }
+       //markLocations(data, earth);
+       // if (data.status != 404){
+       //   markLocationsRemove(locsARR);
+       //   markLocations(data, earth)
+       //
+       // }
+       // else{
+       //   alert("ERROR404: No result found");
+       // }
+       //console.log(data)
+     //  document.getElementById('result').innerHTML = `${data.url}`;
+    })
      //markLocations("data.location", earth)
-   }
+  }
 }
 
 window.locsARR = [];
 function markLocations(data, earth){
 
-  //console.log(data)
-  var tempData = data.reports[0].locations
-  //console.log(tempData)
+  if(data.reports[0].reported_events[0].location == ""){
+    return
+  }
+  var tempData = data.reports[0].reported_events[0].location
+  console.log(tempData)
   var locsArr = tempData.split(", ");
   for (let i = 0; i < locsArr.length; i++){
       console.log(locsArr[i])
       var arr = locs(locsArr[i])
       var marker = WE.marker([arr[0], arr[1]]).addTo(earth);
-      var subStr = "<br>"+"<em>"+"Reported cases: "+"</em>"+data.reports[0].reported_events+"<br>"+"<em>"+"Hospitalised cases: "+"</em>"+data.reports[0].hospitalised+"<br>"+"<em>"+"Deaths: "+"</em>"+data.reports[0].deaths+"<br>"+"<em>"+"Locations affected: "+"</em>"+data.reports[0].locations
+
+
+      var repSub = ""
+      for(let i = 0; i < data.reports[0].reported_events.length; i++){
+        if(data.reports[0].reported_events[i].type == "infected"){
+            repSub = "<br>"+"<em>"+"Reported cases: "+"</em>"+data.reports[0].reported_events[i].number_affected
+        }
+      }
+
+      var hosSub = ""
+      for(let i = 0; i < data.reports[0].reported_events.length; i++){
+        if(data.reports[0].reported_events[i].type == "hospitalised"){
+            hosSub = "<br>"+"<em>"+"Hospitalised cases: "+"</em>"+data.reports[0].reported_events[i].number_affected
+        }
+      }
+
+
+      var deadSub = ""
+      for(let i = 0; i < data.reports[0].reported_events.length; i++){
+        if(data.reports[0].reported_events[i].type == "death"){
+            deadSub = "<br>"+"<em>"+"Dead: "+"</em>"+data.reports[0].reported_events[i].number_affected
+        }
+      }
+
+      var subStr = repSub+hosSub+deadSub
       var str = "<strong><u>"+data.headline+"</strong></u>"+"<br>"+data.date_of_publication+"<i>"+"<br>"+data.main_text+"</i>"+subStr+"<br>"+"<a href= "+data.url+">"+"find out more"+"</a>"+"<br>"
       marker.bindPopup(str, {maxWidth: 500, maxHeight: 2000,  closeButton: true});
       //var markerCustom = WE.marker([0, 0], '/img/logo-webglearth-white-100.png', 100, 24).addTo(earth);
@@ -572,13 +742,57 @@ function markLocationsRemove(locsAR){
 function markLocationsSearch(data, earth, place){
 
     var arr = locs(place)
+    if(arr == []){
+      return
+    }
+
+    //console.log(data)
+    if(data[0].reports[0].reported_events[0].location == ""){
+      return
+    }
+
     var marker = WE.marker([arr[0], arr[1]]).addTo(earth);
-    var subStr = "<br>"+"<em>"+"Reported cases: "+"</em>"+data[0].reports[0].reported_events+"<br>"+"<em>"+"Hospitalised cases: "+"</em>"+data[0].reports[0].hospitalised+"<br>"+"<em>"+"Deaths: "+"</em>"+data[0].reports[0].deaths+"<br>"//+"<em>"+"Locations affected: "+"</em>"+data[0].reports[0].locations
-    var str = "<strong><u><font size='2' color='blue'>"+data[0].headline+"</strong></u></font>"+"<br>"+data[0].date_of_publication+"<i>"+"<br>"+data[0].main_text+"</i>"+subStr+"<br>"+"<a href= "+data[0].url+">"+"Find out more about the outbreak"+"</a>"+"<br>"
+    // var polygon = WE.polygon([[arr[0]-0.15, arr[1]], [arr[0], arr[1]-0.15], [arr[0]-0.15, arr[1]-0.15]], {
+    //   opacity: 1,
+    //   fillOpacity: 0.3,
+    //   weight: 5
+    // }).addTo(earth);
+
+
+    var repSub = ""
+    for(let i = 0; i < data[0].reports[0].reported_events.length; i++){
+      if(data[0].reports[0].reported_events[i].type == "infected"){
+          repSub = "<br>"+"<em>"+"Reported cases: "+"</em>"+data[0].reports[0].reported_events[i].number_affected
+      }
+    }
+
+    var hosSub = ""
+    for(let i = 0; i < data[0].reports[0].reported_events.length; i++){
+      if(data[0].reports[0].reported_events[i].type == "hospitalised"){
+          hosSub = "<br>"+"<em>"+"Hospitalised cases: "+"</em>"+data[0].reports[0].reported_events[i].number_affected
+      }
+    }
+
+
+    var deadSub = ""
+    for(let i = 0; i < data[0].reports[0].reported_events.length; i++){
+      if(data[0].reports[0].reported_events[i].type == "death"){
+          deadSub = "<br>"+"<em>"+"Dead: "+"</em>"+data[0].reports[0].reported_events[i].number_affected
+      }
+    }
+
+    var subStr = repSub+hosSub+deadSub
+    var str = "<strong><u><font size='2' color='blue'>"+data[0].headline+"</strong></u></font>"+"<br>"+data[0].date_of_publication+"<i>"+"<br>"+data[0].main_text+"</i>"+subStr+"<br>"+"<a href= "+data[0].url+">"+"find out more"+"</a>"+"<br>"
     marker.bindPopup(str, {maxWidth: 500, maxHeight: 2000,  closeButton: true}).openPopup();
-    var markerCustom = WE.marker([arr[0], arr[1]], '/img/logo-webglearth-white-100.png', 100, 24).addTo(earth);
+    panTo(arr);
+
+    // var subStr = "<br>"+"<em>"+"Reported cases: "+"</em>"+data[0].reports[0].reported_events+"<br>"+"<em>"+"Hospitalised cases: "+"</em>"+data[0].reports[0].hospitalised+"<br>"+"<em>"+"Deaths: "+"</em>"+data[0].reports[0].deaths+"<br>"//+"<em>"+"Locations affected: "+"</em>"+data[0].reports[0].locations
+    // var str = "<strong><u><font size='2' color='blue'>"+data[0].headline+"</strong></u></font>"+"<br>"+data[0].date_of_publication+"<i>"+"<br>"+data[0].main_text+"</i>"+subStr+"<br>"+"<a href= "+data[0].url+">"+"Find out more about the outbreak"+"</a>"+"<br>"
+    marker.bindPopup(str, {maxWidth: 500, maxHeight: 2000,  closeButton: true}).openPopup();
+    //var markerCustom = WE.marker([arr[0], arr[1]], '/img/logo-webglearth-white-100.png', 100, 24).addTo(earth);
     panTo(arr);
 }
+
 
 function newsAPI(){
   fetch('https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/everything?q=health AND outbreak&language=en&apiKey=84ceb92e06b44f1db554d716c0fa0a01', {
@@ -600,11 +814,20 @@ function newsAPI(){
   .then(function(data) {
       //console.log(data)
       var element = document.getElementById("result");
-      //document.getElementById('result').innerHTML = `${data.articles[i].title}`;
+      // document.getElementById('result').innerHTML = `${data.articles[i].title}`;
       for(i=0; i<20 ; i++){
+
+        console.log(data.articles[i].title)
+        var a = document.createElement('a');
+        //a.title
         var node = document.createTextNode(""+ data.articles[i].title);
-        // para.appendChild(node);
-        element.appendChild(node);
+        a.appendChild(node);
+        a.href = ""+data.articles[i].url
+        element.appendChild(a);
+        var br1 = document.createElement("br");
+        element.appendChild(br1);
+        var br2 = document.createElement("br");
+        element.appendChild(br2);
       }
   })
 }
