@@ -94,12 +94,8 @@ ns = api.namespace('outbreaktable', description='Returns the analysis after gett
 @api.doc(params={'end_date': 'end of period of interest. example: 2019-02-25T03:00:00'})
 
 @ns.route('/show/<string:start_date>/<string:end_date>/<string:location>/<string:key_terms>')
-<<<<<<< HEAD
 @ns.route('/show/<string:start_date>/<string:end_date>//<string:key_terms>')
 @ns.route('/show/<string:start_date>/<string:end_date>/<string:location>')
-=======
-
->>>>>>> a0f3b45b28beddbe37df3de070e3b5d354ea2f94
 @ns.route('/show/<string:start_date>/<string:end_date>')
 @api.response(404, 'database not found.')
 @api.response(400, 'Invalid inputs.')
