@@ -1,0 +1,51 @@
+Alabama,33,-87
+Alaska,61,-152
+Arizona,34,-111
+Arkansas,35,-92
+California,36,-120
+Colorado,39,-105
+Connecticut,41,-73
+Delaware,39,-75
+District of Columbia,39,-77
+Florida,28,-81
+Georgia,33,-83
+Hawaii,21,-157
+Idaho,44,-114
+Illinois,40,-89
+Indiana,40,-86
+Iowa,42,-93
+Kansas,38,-96
+Kentucky,37,-84
+Louisiana,31,-91
+Maine,44,-69
+Maryland,39,-77
+Massachusetts,42,-71
+Michigan,43,-84
+Minnesota,45,-94
+Mississippi,32,-89
+Missouri,38,-92
+Montana,47,-110
+Nebraska,41,-98
+Nevada,38,-117
+New Hampshire,43,-71
+New Jersey,40,-74
+New Mexico,35,-106
+New York,42,-75
+North Carolina,35,-80
+North Dakota,47,-100
+Ohio,40,-83
+Oklahoma,35,-97
+Oregon,44,-122
+Pennsylvania,40,-77
+Rhode Island,41,-71
+South Carolina,34,-81
+South Dakota,44,-99
+Tennessee,36,-87
+Texas,31,-97
+Utah,40,-112
+Vermont,44,-73
+Virginia,38,-78
+Washington,47,-121
+West Virginia,38,-81
+Wisconsin,44,-89
+Wyoming,43,-107

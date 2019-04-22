@@ -10,6 +10,13 @@ import mysql.connector
 app=Flask(__name__)
 api = Api(app)
 
+db = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="Password"
+    )
+
+cur = db.cursor()
 
 # function used to split a date strting
 def getDateInParts(inputs):
@@ -73,13 +80,7 @@ class show(Resource):
         # start_date = datetime.datetime()
         ###############################################################################################################################
         # connect to our database
-        db = mysql.connector.connect(
-          host="localhost",
-          user="root",
-          passwd="Password"
-        )
-
-        cur = db.cursor()
+        
         cur.execute('use cdcDB')
         querry = "SELECT * from outbreakTable"
         # print(querry)
@@ -147,4 +148,4 @@ class show(Resource):
 # this is the main file
 #########################################################################
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0',port=5000, debug=True)

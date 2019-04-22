@@ -1,86 +1,146 @@
-<!-- insert map -->
+<!DOCTYPE html>
 <html>
+<head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
+</head>
 <style>
 body {margin:0;height:0;}
 * {box-sizing: border-box;}
 
-.open-button {
-  background-color: #4169e1;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  opacity: 0.8;
-  position: fixed;
-  bottom: 23px;
-  right: 28px;
-  width: 250px;
+.custom .pop-up-wrap-text{
+  overflow: auto;
 }
 
-/* The popup chat - hidden by default */
-.chat-popup {
-  display: none;
+.sidenav {
+  height: 50%;
+  width: 0;
+  left: 90;
+  top: 40;
+  right: 0;
+  position: fixed;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  position: fixed;
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 25px;
+  margin-left: 0;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+.popup {
+  overflow: auto;
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* The actual popup */
+.popup .popuptext {
+  overflow: auto;
+  word-wrap: break-word;
+  visibility: hidden;
+  width: 400px;
+  background-color: white;
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: fixed;
+  z-index: 1;
+  bottom: 0;
+  left: 100%;
+  margin-left: 0;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+
+.butpos{
+  position:fixed;
+  left: 1%;
+  bottom: 2%;
+
+}
+
+.bottomright {
+  word-wrap: break-word;
   position: fixed;
   bottom: 0;
-  right: 15px;
-  border: 3px solid #f1f1f1;
-  z-index: 9;
+  right: 0;
 }
 
-/* Add styles to the form container */
-.form-container {
-  max-width: 300px;
-  padding: 10px;
-  background-color: white;
-}
-
-/* Full-width textarea */
-.form-container textarea {
-  width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  border: none;
-  background: #f1f1f1;
-  resize: none;
-  min-height: 200px;
-}
-
-/* When the textarea gets focus, do something */
-.form-container textarea:focus {
-  background-color: #ddd;
-  outline: none;
-}
-
-/* Set a style for the submit/send button */
-.form-container .btn {
-  background-color: #4CAF50;
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom:10px;
-  opacity: 0.8;
-}
-
-/* Add a red background color to the cancel button */
-.form-container .cancel {
-  background-color: #4169e1;
-}
-
-/* Add some hover effects to buttons */
-.form-container .btn:hover, .open-button:hover {
-  opacity: 1;
+.box_and {
+  position: absolute;
+  top: 60%;
+  bottom: 0;
+  right: 0;
+  width: 320px;
+  border: 4px solid Steelblue;
 }
 
 .navbar {
     margin-bottom: 0;
     border-radius: 0;
+    background-color: Steelblue;
 }
 
 .icon-bar {
@@ -91,10 +151,14 @@ body {margin:0;height:0;}
   transform: translateY(-50%);
 }
 
+ul{
+  background-color: Steelblue;
+}
+
 .icon-bar a {
   display: block;
   text-align: center;
-  padding: 16px;
+  padding: 30px;
   transition: all 0.3s ease;
   color: white;
   font-size: 20px;
@@ -124,11 +188,6 @@ body {margin:0;height:0;}
   color: white;
 }
 
-.youtube {
-  background: #bb0000;
-  color: white;
-}
-
 .content {
   margin-left: 75px;
   font-size: 30px;
@@ -136,81 +195,148 @@ body {margin:0;height:0;}
 
 </style>
 
-<body>
+<head>
+<script src="http://www.webglearth.com/v2/api.js"></script>
+  <script>
+
+    function initialize() {
+        //var options = {atmosphere: true, center: [0, 0], zoom: 0, sky: true, zooming: true,  unconstrainedRotation: true};
+        //var earth = new WE.map('earth_div', options);
+
+      window.options = {atmosphere: true, center: [0, 0], zoom: 0, sky: true, zooming: true,  unconstrainedRotation: true};
+      window.earth = new WE.map('earth_div', options);
+
+      WE.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {
+       foo: 'bar', attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+      }).addTo(earth);
+     //var city = document.getElementById("search_by_location()").value;
+     newsAPI();
+     earth.setView([31.968599, -99.901810], 3);
+     initShow();
+     //markLocationsRemove()
+    }
+    function panTo(coords){
+       earth.panTo(coords);
+    }
+    function flyToAmerica(){
+       earth.panInsideBounds([[41,-98],[41,-98]],{heading: 0, tilt: 0, duration: 2});
+    }
+    function initShow(){
+      fetch('http://0.0.0.0:5000/show', {
+      //fetch('https://cors-anywhere.herokuapp.com/http://0.0.0.0:5000/outbreaktable/show/2019-02-15T03:00:00/2019-02-25T03:00:00', {
+          method: 'GET',
+          dataType: 'json',
+          crossdomain: 'true',
+          headers: {
+              'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
+              'Access-Control-Allow-Methods': 'GET',
+              'Access-Control-Allow-Headers': 'Content-Type',
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          }
+      })
+      .then((resp) => resp.json())
+      .then(function(data) {
+          var len = Object.keys(data).length;
+          console.log(Object.keys(data).length);
+          for (let i = 0; i<len; i++){
+            markLocations(data[i], earth);
+            //markLocationsRemove(data[i], earth);
+            //earth.setMap(null);
+          }
+      })
+    }
+  </script>
+  <style>
+       html, body{
+         padding: 0;
+         margin-left: 0;
+         margin-right: 0;
+       }
+       #earth_div{
+         top: 0;
+         right: 0;
+         bottom: 0;
+         left: 0;
+         background-color: #fff;
+         position: absolute !important;
+         background-size: cover
+       }
+</style>
+<title>MapOutbreaks</title>
+</head>
+
+<body onload="initialize()">
+  <div id="earth_div"></div>
+</body>
+
 <nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">HEALTHMAP</a>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#"><font size="4" color="white">MapOutbreaks</a></font>
+        </div>
+    <div class="collapse navbar-collapse" id="myNavbar" background-color="Steelblue">
+        <ul class="nav navbar-nav" background-color="Steelblue">
+            <li><a href="#"><font size="4" color="white">Home</a></li></font>
+            <li><a onclick="myFunction()"><font size="4" color="white">About</a></li></font>
+            <li><a onclick=" myFunctionContactUs()"><font size="4" color="white">Contact Us</a></li></font>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-        </ul>
+    <span style="font-size:20px;float:right;margin-top:1%;color:white;cursor:pointer" onclick="openNav()">&#9776;search</span>
     </div>
 </div>
 </nav>
 
-<body>
-<p style="margin-top: 1em"> <font size="5" face="sans-serif" color="red"><marquee>All the alerts will go here</marquee>
-</body>
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <div class="search-container" >
+    <!-- <p id="error"><font size="3" color="red">Start date should be greater than end date</p></font> -->
+    <input type="text" id="startDate" placeholder="Enter Start Date" value=""><i class="fa fa-calendar" style="color:white;font-size:25px"></i><br>
+    <br><input type="text" id="endDate"  placeholder="Enter End Date" value=""><i class="fa fa-calendar" style="color:white;font-size:25px"></i></br>
+    <br><input type="text" id="location"  placeholder="Enter Location" value=""><i class="fa fa-plane" style="color:blue;font-size:25px"></i></br>
+    <br><input type="text" id="keyterm"  placeholder="Enter diseases" value=""><i class="fa fa-ambulance" style="color:red;font-size:25px"></i></br>
+    <br><button onclick="getInput()"><i class="fa fa-search">Search</button></i></br>
+    <br><p id="error1"><font size="3" color="red"></font></p>
+    <!-- <br><input type="button" value="Go to America" onclick="flyToAmerica()"></br> -->
+   </div>
 
-<!-- using a responsive iframe -->
-<div class="responsive-map-container">
-  <!-- place the iframe code between here... -->
-    <iframe src="https://www.google.com/maps/embed" width="600" height="450" frameborder="0" style="border:0"></iframe>
-  <!-- ... and here -->
 </div>
 
+<div class="box_and">
+    <center><font size="5" color="red"> Alerts and Watches</font></center>
+    <marquee height="100%" direction = "up" scrollamount="3" onmousedown="this.stop();" onmouseup="this.start();"><font size="4" color="white"><p id="result"></p></font></marquee>
+</div>
+
+<div class="butpos">
+  <button style="font-size:30px"><i class="fa fa-map-marker" onclick="flyToAmerica()"></i></button>
+</div>
 <div class="icon-bar">
-  <a href="https://m.facebook.com/CDC/?__tn__=CH-R" class="facebook"><i class="fa fa-facebook"></i></a>
-  <a href="https://www.cdc.gov/socialmedia/tools/Twitter.html" class="twitter"><i class="fa fa-twitter"></i></a>
-  <a href="https://www.cdc.gov/" class="google"><i class="fa fa-google"></i></a>
-  <a href="https://au.linkedin.com/company/centers-for-disease-control-and-prevention" class="linkedin"><i class="fa fa-linkedin"></i></a>
+        <div class="popup">
+          <a onclick="myFunctionNews()" class="google"><i class="fa fa-google"></a></i>
+          <!-- <span class="popuptext" id="myPopup">
+            <marquee height="100%" direction = "up" scrollamount="3" onmousedown="this.stop();" onmouseup="this.start();">
+              <font size="4" color="blue">
+                <p id="result"></p>
+              </font>
+            </marquee>
+          </span> -->
+        </div>
 </div>
-
-<button class="open-button" onclick="openForm()">Chat</button>
-
-<div class="chat-popup" id="myForm">
-    <form action="/action_page.php" class="form-container">
-    <label for="msg"><b>Message</b></label>
-    <textarea placeholder="Type message.." name="msg" required></textarea>
-    <button type="submit" class="btn">Send</button>
-    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-    </form>
-</div>
-
-<!-- /insert map -->
-<style media="screen">
-.responsive-map-container {
-    position: relative;
-    padding-bottom: 56.25%;
-    padding-top: 40px;
-    height: 0;
-    overflow: hidden;
-}
-
-.responsive-map-container iframe,
-.responsive-map-container object,
-.responsive-map-container embed {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-</style>
 
 <script>
+
+function myFunction() {
+    alert("MapOutbreaks, a team of software developers at UNSW in 2019, is an online platform in utilizing online informal sources for disease outbreak monitoring and real-time surveillance of emerging public health threats. The freely available Web site deliver real-time intelligence on a broad range of emerging infectious diseases for a diverse audience including libraries, local health departments, governments, and international travelers. MapOutbreaks brings together disparate data sources, including online news aggregators and validated official reports, to achieve a unified and comprehensive view of the current global state of infectious diseases and their effect on human and animal health. Through an automated process, updating 24/7/365, the system monitors, organizes, integrates, filters, visualizes and disseminates online information about emerging diseases in nine languages, facilitating early detection of global public health threats.")
+}
+
+function myFunctionContactUs() {
+    alert("Send your queries to mapOutbreak@gmail.com");
+}
+
 function openForm() {
   document.getElementById("myForm").style.display = "block";
 }
@@ -218,7 +344,494 @@ function openForm() {
 function closeForm() {
   document.getElementById("myForm").style.display = "none";
 }
-</script>
 
+function myFunctionNews() {
+    var popup = document.getElementById("myPopup");
+    //newsAPI();
+    popup.classList.toggle("show");
+}
+
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+  // document.getElementById("error1").innerHTML = "";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  window.location.reload()
+  //document.getElementById("mySidenav").removeAttribute("input");
+  //initialize();
+}
+
+function locs(place){
+
+  place = (place + "").toLowerCase();
+  var locsAdd = {};
+  // Add keys to the hashmap
+  locsAdd['alabama'] = { long: 33, lat: -87 };
+  locsAdd['alaska'] = { long: 61, lat: -152 };
+  locsAdd['arizona'] = { long: 34, lat: -111 };
+  locsAdd['arkansas'] = { long: 35, lat: -92 };
+  locsAdd['california'] = { long: 36, lat: -120 };
+  locsAdd['colorado'] = { long: 39, lat: -105 };
+  locsAdd['connecticut'] = { long: 41, lat: -73 };
+  locsAdd['delaware'] = { long:39 , lat: -75};
+  locsAdd['district of columbia'] = { long:39 , lat: -77};
+  locsAdd['florida'] = { long: 28, lat: -81 };
+  locsAdd['georgia'] = { long:33 , lat: -83 };
+  locsAdd['hawaii'] = { long: 21, lat: -157};
+  locsAdd['idaho'] = { long: 44, lat: -114 };
+  locsAdd['illinois'] = { long:40 , lat: -89 };
+  locsAdd['indiana'] = { long:40 , lat: -86};
+  locsAdd['iowa'] = { long:42 , lat: -93 };
+  locsAdd['kansas'] = { long:38 , lat: -96 };
+  locsAdd['kentucky'] = { long: 37, lat: -84};
+  locsAdd['louisiana'] = { long: 31, lat: -91};
+  locsAdd['maine'] = { long: 44, lat: -69};
+  locsAdd['maryland'] = { long: 39, lat: -77 };
+  locsAdd['massachusetts'] = { long:42 , lat: -71 };
+  locsAdd['michigan'] = { long: 43, lat: -84 };
+  locsAdd['minnesota'] = { long: 45, lat: -84 };
+  locsAdd['mississippi'] = { long: 32, lat: -89 };
+  locsAdd['missouri'] = { long:38 , lat: -92 };
+  locsAdd['montana'] = { long: 47, lat: -110};
+  locsAdd['nebraska'] = { long: 41, lat: -98};
+  locsAdd['nevada'] = { long:38 , lat: -117};
+  locsAdd['new hampshire'] = { long: 43, lat: -71};
+  locsAdd['new jersey'] = { long: 40 , lat: -74};
+  locsAdd['new mexico'] = { long:35 , lat: -106};
+  locsAdd['new york'] = { long: 42.5, lat: -75.5 };
+  locsAdd['north carolina'] = { long: 35, lat: -80};
+  locsAdd['north dakota'] = { long:47 , lat: -100};
+  locsAdd['ohio'] = { long: 40, lat: -83};
+  locsAdd['oklahoma'] = { long: 35, lat: -97 };
+  locsAdd['oregon'] = { long: 44, lat:  -122};
+  locsAdd['pennsylvania'] = { long: 40, lat: -77 };
+  locsAdd['rhode island'] = { long: 41.5, lat: -71.5};
+  locsAdd['south carolina'] = { long: 34, lat: -81};
+  locsAdd['south dakota'] = { long: 44, lat: -99};
+  locsAdd['tennessee'] = { long: 36, lat: -87};
+  locsAdd['texas'] = { long: 31, lat: -97};
+  locsAdd['utah'] = { long: 40, lat: -112};
+  locsAdd['vermont'] = { long: 44, lat: -73};
+  locsAdd['virginia'] = { long: 38, lat: -78};
+  locsAdd['washington'] = { long:47 , lat: -121};
+  locsAdd['west virginia'] = { long: 38, lat: -81};
+  locsAdd['wisconsin'] = { long: 44, lat: -89};
+  locsAdd['wyoming'] = { long: 43, lat: -107};
+
+  var arr = []
+  if (place in locsAdd){     // modify cat key here
+    arr.push(locsAdd[place].long);
+    arr.push(locsAdd[place].lat);
+  }
+  return arr;
+}
+
+function getInput() {
+  document.getElementById("error1").innerHTML = "";
+  var x = document.getElementById("startDate").value;
+  var y = document.getElementById("endDate").value;
+  var z = document.getElementById("location").value;
+  var a = document.getElementById("keyterm").value;
+
+
+  //all parameters
+  if (x!="" && y!="" && a!="" && z!=""){
+      fetch('http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'location='+z+'&'+'keyterm='+a, {
+         method: 'GET',
+         dataType: 'json',
+         crossdomain: 'true',
+         headers: {
+             'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
+             'Access-Control-Allow-Methods': 'GET',
+             'Access-Control-Allow-Headers': 'Content-Type',
+             'Accept': 'application/json',
+             'Content-Type': 'application/json'
+         }
+      })
+      .then(function(response) {
+         if (!response.ok) {
+             var x =  Error(response.status);
+             //alert(x)
+             if (x == "Error: 404"){
+               document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
+               //alert("No result found.")
+               return
+             }
+             else if (x == "Error: 400"){
+               document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
+               //alert("Incorrect input")
+               return
+             }
+         }
+         //else{
+         return response.json();
+       //  }
+       })
+      .then(function(data) {
+         //markLocations(data, earth)
+         //initialize2();
+         markLocationsRemove(locsARR);
+         markLocationsSearch(data, earth, z);
+         // var len = Object.keys(data).length;
+         // console.log(Object.keys(data).length);
+         // for (let i = 0; i<len; i++){
+         //   markLocations(data[i], earth);
+         //   //markLocationsRemove(data[i], earth);
+         //   //earth.setMap(null);
+         // }
+
+
+         // make list
+         //markLocationsSearch(data, earth, z);
+         // if (data.status != 404){
+         //   markLocationsRemove(locsARR);
+         //   markLocationsSearch(data.json(), earth, z);
+         // }
+         // else{
+         //   alert("ERROR404: No result found");
+         // }
+         //console.log(data)
+       //  document.getElementById('result').innerHTML = `${data.url}`;
+      })
+
+      //markLocationsSearch("data.location", earth)
+  }
+
+
+  //startdate enddate and location
+  else if (x!="" && y!="" && z!=""){
+     fetch('http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'location='+z, {
+     //fetch('https://cors-anywhere.herokuapp.com/http://0.0.0.0:5000/outbreaktable/show/2019-02-15T03:00:00/2019-02-25T03:00:00', {
+        method: 'GET',
+        dataType: 'json',
+        crossdomain: 'true',
+        headers: {
+            'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+     })
+     .then(function(response) {
+        if (!response.ok) {
+            var x =  Error(response.status);
+            //alert(x)
+            if (x == "Error: 404"){
+              document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
+              //alert("No result found.")
+              return
+            }
+            else if (x == "Error: 400"){
+              document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
+              //alert("Incorrect input")
+              return
+            }
+        }
+        //else{
+        return response.json();
+      //  }
+      })
+     //.then((resp) => resp.json())
+     .then(function(data) {
+        //markLocations(data, earth)
+        //initialize2();
+        markLocationsRemove(locsARR);
+        markLocationsSearch(data, earth, z);
+        // if (data.status != 404){
+        //   markLocationsRemove(locsARR);
+        //   markLocationsSearch(data.json(), earth, z);
+        // }
+        // else{
+        //   alert("ERROR404: No result found");
+        // }
+        //console.log(data)
+      //  document.getElementById('result').innerHTML = `${data.url}`;
+     })
+    // markLocations(data, earth)
+  }
+
+
+  //startdate enddate and keywords
+  else if (x!="" && y!="" && a!=""){
+     fetch('http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'keyterm='+a, {
+     //fetch('https://cors-anywhere.herokuapp.com/http://0.0.0.0:5000/outbreaktable/show/2019-02-15T03:00:00/2019-02-25T03:00:00', {
+        method: 'GET',
+        dataType: 'json',
+        crossdomain: 'true',
+        headers: {
+            'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+     })
+     .then(function(response) {
+        if (!response.ok) {
+            var x =  Error(response.status);
+            //alert(x)
+            if (x == "Error: 404"){
+              document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
+              //alert("No result found.")
+              return
+            }
+            else if (x == "Error: 400"){
+              document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
+              //alert("Incorrect input")
+              return
+            }
+        }
+        //else{
+        return response.json();
+      //  }
+      })
+      .then(function(data) {
+        //markLocations(data, earth)
+        //initialize2();
+
+        if(data == null){
+          return
+        }
+        //console.log(data)
+        markLocationsRemove(locsARR);
+        var len = Object.keys(data).length;
+        console.log(Object.keys(data).length);
+        for (let i = 0; i<len; i++){
+          markLocations(data[i], earth);
+          //markLocationsRemove(data[i], earth);
+          //earth.setMap(null);
+        }
+        //markLocations(data, earth)
+        //markLocationsSearch(data, earth, z);
+        // if (data.status != 404){
+        //   markLocationsRemove(locsARR);
+        //   markLocationsSearch(data.json(), earth, z);
+        // }
+        // else{
+        //   alert("ERROR404: No result found");
+        // }
+        //console.log(data)
+      //  document.getElementById('result').innerHTML = `${data.url}`;
+     })
+     //markLocationsSearch("data.location", earth)
+  }
+
+
+  //startdate and enddate
+  else if (x!="" && y!=""){
+    var url = 'http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y
+    fetch(url, {
+    //fetch('https://cors-anywhere.herokuapp.com/http://0.0.0.0:5000/outbreaktable/show/2019-02-15T03:00:00/2019-02-25T03:00:00', {
+        method: 'GET',
+        dataType: 'json',
+        crossdomain: 'true',
+        headers: {
+            'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(function(response) {
+       if (!response.ok) {
+           var x =  Error(response.status);
+           //alert(x)
+           if (x == "Error: 404"){
+             document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
+             //alert("No result found.")
+             return
+           }
+           else if (x == "Error: 400"){
+             document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
+             //alert("Incorrect input")
+             return
+           }
+       }
+       //else{
+       return response.json();
+     //  }
+   })
+    .then(function(data) {
+       //markLocations(data, earth)
+       //initialize2();
+       markLocationsRemove(locsARR);
+       var len = Object.keys(data).length;
+       console.log(Object.keys(data).length);
+       for (let i = 0; i<len; i++){
+         markLocations(data[i], earth);
+         //markLocationsRemove(data[i], earth);
+         //earth.setMap(null);
+       }
+       //markLocations(data, earth);
+       // if (data.status != 404){
+       //   markLocationsRemove(locsARR);
+       //   markLocations(data, earth)
+       //
+       // }
+       // else{
+       //   alert("ERROR404: No result found");
+       // }
+       //console.log(data)
+     //  document.getElementById('result').innerHTML = `${data.url}`;
+    })
+     //markLocations("data.location", earth)
+  }
+}
+
+window.locsARR = [];
+function markLocations(data, earth){
+
+  if(data.reports[0].reported_events[0].location == ""){
+    return
+  }
+  var tempData = data.reports[0].reported_events[0].location
+  console.log(tempData)
+  var locsArr = tempData.split(", ");
+  for (let i = 0; i < locsArr.length; i++){
+      console.log(locsArr[i])
+      var arr = locs(locsArr[i])
+      var marker = WE.marker([arr[0], arr[1]]).addTo(earth);
+
+
+      var repSub = ""
+      for(let i = 0; i < data.reports[0].reported_events.length; i++){
+        if(data.reports[0].reported_events[i].type == "infected"){
+            repSub = "<br>"+"<em>"+"Reported cases: "+"</em>"+data.reports[0].reported_events[i].number_affected
+        }
+      }
+
+      var hosSub = ""
+      for(let i = 0; i < data.reports[0].reported_events.length; i++){
+        if(data.reports[0].reported_events[i].type == "hospitalised"){
+            hosSub = "<br>"+"<em>"+"Hospitalised cases: "+"</em>"+data.reports[0].reported_events[i].number_affected
+        }
+      }
+
+
+      var deadSub = ""
+      for(let i = 0; i < data.reports[0].reported_events.length; i++){
+        if(data.reports[0].reported_events[i].type == "death"){
+            deadSub = "<br>"+"<em>"+"Dead: "+"</em>"+data.reports[0].reported_events[i].number_affected
+        }
+      }
+
+      var subStr = repSub+hosSub+deadSub
+      var str = "<strong><u>"+data.headline+"</strong></u>"+"<br>"+data.date_of_publication+"<i>"+"<br>"+data.main_text+"</i>"+subStr+"<br>"+"<a href= "+data.url+">"+"find out more"+"</a>"+"<br>"
+      marker.bindPopup(str, {maxWidth: 500, maxHeight: 2000,  closeButton: true});
+      //var markerCustom = WE.marker([0, 0], '/img/logo-webglearth-white-100.png', 100, 24).addTo(earth);
+      //marker.removeFrom(earth)
+      locsARR.push(marker);
+      //WE.marker([arr[0], arr[1]]).removeFrom(earth);
+  }
+  // console.log(locsARR.length)
+
+  //marker.removeFrom(earth)
+  //marker.setMap(null);
+}
+
+function markLocationsRemove(locsAR){
+  for (i = 0; i<locsAR.length; i++){
+    locsAR[i].removeFrom(earth);
+  }
+}
+
+function markLocationsSearch(data, earth, place){
+
+    var arr = locs(place)
+    if(arr == []){
+      return
+    }
+
+    //console.log(data)
+    if(data[0].reports[0].reported_events[0].location == ""){
+      return
+    }
+
+    var marker = WE.marker([arr[0], arr[1]]).addTo(earth);
+    // var polygon = WE.polygon([[arr[0]-0.15, arr[1]], [arr[0], arr[1]-0.15], [arr[0]-0.15, arr[1]-0.15]], {
+    //   opacity: 1,
+    //   fillOpacity: 0.3,
+    //   weight: 5
+    // }).addTo(earth);
+
+
+    var repSub = ""
+    for(let i = 0; i < data[0].reports[0].reported_events.length; i++){
+      if(data[0].reports[0].reported_events[i].type == "infected"){
+          repSub = "<br>"+"<em>"+"Reported cases: "+"</em>"+data[0].reports[0].reported_events[i].number_affected
+      }
+    }
+
+    var hosSub = ""
+    for(let i = 0; i < data[0].reports[0].reported_events.length; i++){
+      if(data[0].reports[0].reported_events[i].type == "hospitalised"){
+          hosSub = "<br>"+"<em>"+"Hospitalised cases: "+"</em>"+data[0].reports[0].reported_events[i].number_affected
+      }
+    }
+
+
+    var deadSub = ""
+    for(let i = 0; i < data[0].reports[0].reported_events.length; i++){
+      if(data[0].reports[0].reported_events[i].type == "death"){
+          deadSub = "<br>"+"<em>"+"Dead: "+"</em>"+data[0].reports[0].reported_events[i].number_affected
+      }
+    }
+
+    var subStr = repSub+hosSub+deadSub
+    var str = "<strong><u><font size='2' color='blue'>"+data[0].headline+"</strong></u></font>"+"<br>"+data[0].date_of_publication+"<i>"+"<br>"+data[0].main_text+"</i>"+subStr+"<br>"+"<a href= "+data[0].url+">"+"find out more"+"</a>"+"<br>"
+    marker.bindPopup(str, {maxWidth: 500, maxHeight: 2000,  closeButton: true}).openPopup();
+    panTo(arr);
+
+    // var subStr = "<br>"+"<em>"+"Reported cases: "+"</em>"+data[0].reports[0].reported_events+"<br>"+"<em>"+"Hospitalised cases: "+"</em>"+data[0].reports[0].hospitalised+"<br>"+"<em>"+"Deaths: "+"</em>"+data[0].reports[0].deaths+"<br>"//+"<em>"+"Locations affected: "+"</em>"+data[0].reports[0].locations
+    // var str = "<strong><u><font size='2' color='blue'>"+data[0].headline+"</strong></u></font>"+"<br>"+data[0].date_of_publication+"<i>"+"<br>"+data[0].main_text+"</i>"+subStr+"<br>"+"<a href= "+data[0].url+">"+"Find out more about the outbreak"+"</a>"+"<br>"
+    marker.bindPopup(str, {maxWidth: 500, maxHeight: 2000,  closeButton: true}).openPopup();
+    //var markerCustom = WE.marker([arr[0], arr[1]], '/img/logo-webglearth-white-100.png', 100, 24).addTo(earth);
+    panTo(arr);
+}
+
+
+function newsAPI(){
+  fetch('https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/everything?q=health AND outbreak&language=en&apiKey=84ceb92e06b44f1db554d716c0fa0a01', {
+  // //fetch('https://cors-anywhere.herokuapp.com/http://0.0.0.0:5000/outbreaktable/show/2019-02-15T03:00:00/2019-02-25T03:00:00', {
+      method: 'GET',
+      dataType: 'json',
+      crossdomain: 'true',
+      headers: {
+          'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
+          'Access-Control-Allow-Methods': 'GET',
+          // 'Access-Control-Allow-Methods': 'GET',
+          'Access-Control-Allow-Headers': 'Content-Type',
+          //  'Access-Control-Allow-Origin': '*',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      }
+  })
+  .then((resp) => resp.json())
+  .then(function(data) {
+      //console.log(data)
+      var element = document.getElementById("result");
+      // document.getElementById('result').innerHTML = `${data.articles[i].title}`;
+      for(i=0; i<20 ; i++){
+
+        console.log(data.articles[i].title)
+        var a = document.createElement('a');
+        //a.title
+        var node = document.createTextNode(""+ data.articles[i].title);
+        a.appendChild(node);
+        a.href = ""+data.articles[i].url
+        element.appendChild(a);
+        var br1 = document.createElement("br");
+        element.appendChild(br1);
+        var br2 = document.createElement("br");
+        element.appendChild(br2);
+      }
+  })
+}
+
+</script>
 </body>
 </html>
