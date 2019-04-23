@@ -10,23 +10,30 @@
 <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
 </head>
 <style>
-body {margin:0;height:0;}
-* {box-sizing: border-box;}
+body, html {
+  /* margin:0; */
+  /* height:0; */
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  overflow-x: hidden;
+  overflow:hidden;
+}
 
 .custom .pop-up-wrap-text{
   overflow: auto;
 }
 
 .sidenav {
-  height: 50%;
+  height: 60%;
   width: 0;
-  left: 90;
-  top: 40;
+  left: 83%;
+  top: 10%;
   right: 0;
   position: fixed;
   overflow-x: hidden;
   transition: 0.5s;
-  padding-top: 20px;
+  padding-top: 15px;
 }
 
 .sidenav a {
@@ -45,62 +52,93 @@ body {margin:0;height:0;}
 
 .sidenav .closebtn {
   position: absolute;
-  top: 0;
+  top: -15px;
   right: 0;
   font-size: 25px;
-  margin-left: 0;
+  margin-left: 10;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  /* z-index: 1; /* Sit on top */ */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 7%;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: LightGray; /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  background-color: LightGray;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: black;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal1 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  /* z-index: 1; /* Sit on top */ */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 15%;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: LightGray; /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content1 {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  background-color: LightGray;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close1 {
+  color: black;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close1:hover,
+.close1:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
-}
-
-.popup {
-  overflow: auto;
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-/* The actual popup */
-.popup .popuptext {
-  overflow: auto;
-  word-wrap: break-word;
-  visibility: hidden;
-  width: 400px;
-  background-color: white;
-  color: #fff;
-  border-radius: 6px;
-  padding: 8px 0;
-  position: fixed;
-  z-index: 1;
-  bottom: 0;
-  left: 100%;
-  margin-left: 0;
-}
-
-/* Popup arrow */
-.popup .popuptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
-
-/* Toggle this class - hide and show the popup */
-.popup .show {
-  visibility: visible;
-  -webkit-animation: fadeIn 1s;
-  animation: fadeIn 1s;
 }
 
 /* Add animation (fade in the popup) */
@@ -137,21 +175,22 @@ body {margin:0;height:0;}
   border: 4px solid Steelblue;
 }
 
+.yup{
+  position: absolute;
+  top: 10%;
+  bottom: 80;
+  left: 1%;
+  width: 220px;
+  border: 2px solid white;
+}
+
 .navbar {
     margin-bottom: 0;
     border-radius: 0;
     background-color: Steelblue;
 }
 
-.icon-bar {
-  position: fixed;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-}
-
-ul{
+.ul{
   background-color: Steelblue;
 }
 
@@ -168,26 +207,6 @@ ul{
   background-color: #000;
 }
 
-.facebook {
-  background: #3B5998;
-  color: white;
-}
-
-.twitter {
-  background: #55ACEE;
-  color: white;
-}
-
-.google {
-  background: #dd4b39;
-  color: white;
-}
-
-.linkedin {
-  background: #007bb5;
-  color: white;
-}
-
 .content {
   margin-left: 75px;
   font-size: 30px;
@@ -199,31 +218,30 @@ ul{
 <script src="http://www.webglearth.com/v2/api.js"></script>
   <script>
 
+    //initialises the window
     function initialize() {
-        //var options = {atmosphere: true, center: [0, 0], zoom: 0, sky: true, zooming: true,  unconstrainedRotation: true};
-        //var earth = new WE.map('earth_div', options);
-
       window.options = {atmosphere: true, center: [0, 0], zoom: 0, sky: true, zooming: true,  unconstrainedRotation: true};
       window.earth = new WE.map('earth_div', options);
 
       WE.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {
        foo: 'bar', attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
       }).addTo(earth);
-     //var city = document.getElementById("search_by_location()").value;
      newsAPI();
      earth.setView([31.968599, -99.901810], 3);
      initShow();
-     //markLocationsRemove()
     }
+
+    //fly to different places
     function panTo(coords){
        earth.panTo(coords);
     }
     function flyToAmerica(){
        earth.panInsideBounds([[41,-98],[41,-98]],{heading: 0, tilt: 0, duration: 2});
     }
+
+    //shows Outbreak on main page
     function initShow(){
       fetch('http://0.0.0.0:5000/show', {
-      //fetch('https://cors-anywhere.herokuapp.com/http://0.0.0.0:5000/outbreaktable/show/2019-02-15T03:00:00/2019-02-25T03:00:00', {
           method: 'GET',
           dataType: 'json',
           crossdomain: 'true',
@@ -241,26 +259,31 @@ ul{
           console.log(Object.keys(data).length);
           for (let i = 0; i<len; i++){
             markLocations(data[i], earth);
-            //markLocationsRemove(data[i], earth);
-            //earth.setMap(null);
           }
       })
     }
   </script>
   <style>
        html, body{
-         padding: 0;
-         margin-left: 0;
-         margin-right: 0;
+         width: 100%;
+         margin: 0px;
+         padding: 0px;
+         overflow-x: hidden;
+         overflow:hidden;
        }
        #earth_div{
          top: 0;
          right: 0;
-         bottom: 0;
+         bottom: -35px;
          left: 0;
          background-color: #fff;
          position: absolute !important;
-         background-size: cover
+         background-size: cover;
+         width: 100%;
+         margin: 0px;
+         padding: 0px;
+         overflow-x: hidden;
+         overflow:hidden;
        }
 </style>
 <title>MapOutbreaks</title>
@@ -283,55 +306,106 @@ ul{
     <div class="collapse navbar-collapse" id="myNavbar" background-color="Steelblue">
         <ul class="nav navbar-nav" background-color="Steelblue">
             <li><a href="#"><font size="4" color="white">Home</a></li></font>
-            <li><a onclick="myFunction()"><font size="4" color="white">About</a></li></font>
-            <li><a onclick=" myFunctionContactUs()"><font size="4" color="white">Contact Us</a></li></font>
+            <li><a id="about"><font size="4" color="white">About</a></li></font>
+            <li><a id="contact"><font size="4" color="white">Contact Us</a></li></font>
         </ul>
     <span style="font-size:20px;float:right;margin-top:1%;color:white;cursor:pointer" onclick="openNav()">&#9776;search</span>
     </div>
 </div>
 </nav>
 
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p><font size='3' color='black'><strong><u><center>MapOutbreaks<br></strong></u></center></font> <br>We are a team of software developers at UNSW who built an online platform which is utilizing online informal sources for disease outbreak monitoring and real-time surveillance of emerging public health threats. The freely available Web site deliver real-time intelligence on a broad range of emerging infectious diseases for a diverse audience including libraries, local health departments, governments, and international travelers.<br><br> MapOutbreaks brings together disparate data sources, including online news aggregators and validated official reports, to achieve a unified and comprehensive view of the current global state of infectious diseases and their effect on human and animal health. Through an automated process, updating 24/7/365, the system monitors, organizes, integrates, filters, visualizes and disseminates online information about emerging diseases in nine languages, facilitating early detection of global public health threats.</p></font>
+  </div>
+</div>
+
+
+<div id="myModal1" class="modal1">
+  <!-- Modal content -->
+  <div class="modal-content1">
+    <span class="close1">&times;</span>
+    <p><font size='3' color='black'>Contact us on mapoutbreaks@gmail.com for furthur queries.<br></font>
+  </div>
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById('myModal');
+var modal1 = document.getElementById('myModal1');
+// Get the button that opens the modal
+var btn = document.getElementById("about");
+var btn1 = document.getElementById("contact");
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+var span1 = document.getElementsByClassName("close1")[0];
+// When the user clicks the button, open the modal
+// btn.onclick= function(){
+//   modal.style.display = "block";
+// }
+
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+btn1.onclick = function() {
+  modal1.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+span1.onclick = function() {
+  modal1.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+window.onclick = function(event) {
+  if (event.target == modal1) {
+    modal1.style.display = "none";
+  }
+}
+</script>
+
 <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <div class="search-container" >
-    <!-- <p id="error"><font size="3" color="red">Start date should be greater than end date</p></font> -->
-    <input type="text" id="startDate" placeholder="Enter Start Date" value=""><i class="fa fa-calendar" style="color:white;font-size:25px"></i><br>
-    <br><input type="text" id="endDate"  placeholder="Enter End Date" value=""><i class="fa fa-calendar" style="color:white;font-size:25px"></i></br>
-    <br><input type="text" id="location"  placeholder="Enter Location" value=""><i class="fa fa-plane" style="color:blue;font-size:25px"></i></br>
-    <br><input type="text" id="keyterm"  placeholder="Enter diseases" value=""><i class="fa fa-ambulance" style="color:red;font-size:25px"></i></br>
+  <div class="search-container">
+    <br><label for='startDate'></label><input type="date"  name="startDate" id="startDate" placeholder="Enter Start Date" value="" min="1990-01-01T00:00"><i class="fa fa-calendar" style="color:white;font-size:20px"></i></br>
+    <!-- <br><i class="fa fa-calendar" style="color:white;font-size:25px"></i><input type="text" id="startDate" placeholder="Enter Start Date" value=""></br> -->
+    <!-- <br><i class="fa fa-calendar" style="color:white;font-size:25px"></i><input type="text" id="endDate" placeholder="Enter end Date" value=""></br> -->
+    <br><input type="date" name="endDate" id="endDate"  placeholder="Enter End Date" value=""><i class="fa fa-calendar" style="color:white;font-size:20px"></i></br>
+    <br><input type="text" id="location"  placeholder="Enter Location" value=""><i class="fa fa-plane" style="color:blue;font-size:20px"></i></br>
+    <br><input type="text" id="keyterm"  placeholder="Enter Keyterms" value=""><i class="fa fa-ambulance" style="color:red;font-size:20px"></i></br>
     <br><button onclick="getInput()"><i class="fa fa-search">Search</button></i></br>
     <br><p id="error1"><font size="3" color="red"></font></p>
-    <!-- <br><input type="button" value="Go to America" onclick="flyToAmerica()"></br> -->
    </div>
 
 </div>
 
+<div class="yup">
+  <p><font size="3" color="yellow">Click on the pins to know more about the outbreak.</p></font>
+</div>
+
 <div class="box_and">
-    <center><font size="5" color="red"> Alerts and Watches</font></center>
+    <center><font size="5" color="red">Latest News</font></center>
     <marquee height="100%" direction = "up" scrollamount="3" onmousedown="this.stop();" onmouseup="this.start();"><font size="4" color="white"><p id="result"></p></font></marquee>
 </div>
 
 <div class="butpos">
   <button style="font-size:30px"><i class="fa fa-map-marker" onclick="flyToAmerica()"></i></button>
 </div>
-<div class="icon-bar">
-        <div class="popup">
-          <a onclick="myFunctionNews()" class="google"><i class="fa fa-google"></a></i>
-          <!-- <span class="popuptext" id="myPopup">
-            <marquee height="100%" direction = "up" scrollamount="3" onmousedown="this.stop();" onmouseup="this.start();">
-              <font size="4" color="blue">
-                <p id="result"></p>
-              </font>
-            </marquee>
-          </span> -->
-        </div>
-</div>
 
 <script>
-
-function myFunction() {
-    alert("MapOutbreaks, a team of software developers at UNSW in 2019, is an online platform in utilizing online informal sources for disease outbreak monitoring and real-time surveillance of emerging public health threats. The freely available Web site deliver real-time intelligence on a broad range of emerging infectious diseases for a diverse audience including libraries, local health departments, governments, and international travelers. MapOutbreaks brings together disparate data sources, including online news aggregators and validated official reports, to achieve a unified and comprehensive view of the current global state of infectious diseases and their effect on human and animal health. Through an automated process, updating 24/7/365, the system monitors, organizes, integrates, filters, visualizes and disseminates online information about emerging diseases in nine languages, facilitating early detection of global public health threats.")
-}
 
 function myFunctionContactUs() {
     alert("Send your queries to mapOutbreak@gmail.com");
@@ -345,29 +419,212 @@ function closeForm() {
   document.getElementById("myForm").style.display = "none";
 }
 
-function myFunctionNews() {
-    var popup = document.getElementById("myPopup");
-    //newsAPI();
-    popup.classList.toggle("show");
-}
-
 function openNav() {
-  document.getElementById("mySidenav").style.width = "250px";
-  // document.getElementById("error1").innerHTML = "";
+  document.getElementById("mySidenav").style.width = "180px";
 }
 
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
   window.location.reload()
-  //document.getElementById("mySidenav").removeAttribute("input");
-  //initialize();
+
+}
+
+function locsCountry(place){
+  place = (place + "").toLowerCase();
+  var lsls ={};
+
+   lsls['andorra'] = { long:1.601554 , lat: 42.546245};
+   lsls['united arab emirates'] = { long:53.847818 , lat: 23.424076};
+   lsls['afghanistan'] = { long:67.709953 , lat: 33.93911};
+   lsls['antigua and barbuda'] = { long: -61.796428 , lat: 17.060816};
+   lsls['aguilla'] = {long:-63.068615 , lat:18.220554};
+   lsls['albania'] = {long:20.168331 , lat:41.153332};
+   lsls['armenia'] = {long:45.038189 , lat:40.069099};
+   lsls['netherlands Antilles'] = {long:-69.060087 , lat:12.226079};
+   lsls['angola'] = {long:17.873887 , lat:-11.202692};
+   lsls['antarctica'] = {long:-0.071389 , lat:-75.250973};
+   lsls['argentina'] = {long:-63.616672 , lat:-38.416097};
+   lsls['american Samoa'] = {long:-170.132217 , lat:-14.270972};
+   lsls['austria'] = {long:14.550072 , lat:47.516231};
+   lsls['australia'] = {long:133.775136 , lat:-25.274398};
+   lsls['aruba'] = {long:-69.968338 , lat:12.52111};
+   lsls['azerbaijan'] = {long:47.576927 , lat:40.143105};
+   lsls['bosnia and Herzegovina'] = {long:17.679076 , lat:43.915886};
+   lsls['barbados'] = {long:-59.543198 , lat:13.193887};
+   lsls['bangladesh'] = {long:90.356331 , lat:23.684994};
+   lsls['belgium'] = { long:4.469936 , lat: 50.503887};
+   lsls['burkina Faso'] = { long:-1.561593 , lat:12.238333};
+   lsls['bulgaria'] = {long:25.48583 , lat:42.733883};
+   lsls['bahrain'] = {long:50.637772 , lat:25.930414};
+   lsls['burundi'] = {long:29.918886 , lat:-3.373056};
+   lsls['benin'] = {long:2.315834 , lat:9.30769};
+   lsls['bermuda'] = {long:-64.75737 , lat:32.321384};
+   lsls['brunei'] = {long:114.727669 , lat:4.535277};
+   lsls['bolivia'] = {long:-63.588653 , lat:-16.290154};
+   lsls['brazil'] = {long:-51.92528 , lat:-14.235004};
+   lsls['bahamas'] = {long:-77.39628 , lat:25.03428};
+   lsls['bhutan'] = {long:90.433601 , lat:27.514162};
+   lsls['bouvet island'] = {long:3.413194 , lat:-54.423199};
+   lsls['botswana'] = {long:24.684866 , lat:-22.328474};
+   lsls['belarus'] = {long:27.953389 , lat:	53.709807};
+   lsls['belize'] = {long:-88.49765 , lat:17.189877};
+   lsls['canada'] = {long:-106.346771 , lat:56.130366};
+   lsls['cocos [Keeling] islands'] = {long:96.870956 , lat:-12.164165};
+   lsls['congo'] = {long:21.758664 , lat:-4.038333};
+   lsls['central african republic'] = {long:20.939444 , lat:6.611111};
+   lsls['congo [republic]'] = {long:15.827659 , lat:-0.228021};
+   lsls['switzerland'] = {long:8.227512 , lat:46.818188};
+   lsls["côte d'Ivoire"] = {long:-5.54708 , lat:7.539989};
+   lsls['cook islands'] = {long:-159.777671 , lat:-21.236736};
+   lsls['chile'] = {long:-71.542969 , lat:-35.675147};
+   lsls['cameroon'] = {long:12.354722 , lat:7.369722};
+   lsls['china'] = {long:104.195397 , lat:35.86166};
+   lsls['colombia'] = {long:-74.297333 , lat:4.570868};
+   lsls['costa rica'] = {long:-83.753428 , lat:9.748917};
+   lsls['cuba'] = {long:-77.781167 , lat:21.521757};
+   lsls['cape verde'] = {long:-24.013197 , lat:16.002082};
+   lsls['christmas island'] = {long:105.690449 , lat:-10.447525};
+   lsls['cyprus'] = {long:33.429859 , lat:35.126413};
+   lsls['czech republic'] = {long:15.472962 , lat:49.817492};
+   lsls['germany'] = {long:10.451526 , lat:51.165691};
+   lsls['djibouti'] = {long:42.590275 , lat:11.825138};
+   lsls['denmark'] = {long:9.501785 , lat:56.26392};
+   lsls['dominica'] = {long:-61.370976 , lat:15.414999};
+   lsls['dominican republic'] = {long:-70.162651 , lat:18.735693};
+   lsls['algeria'] = {long:1.659626 , lat:28.033886};
+   lsls['ecuador'] = {long:-78.183406 , lat:-1.831239};
+   lsls['estonia'] = {long:25.013607 , lat:58.595272};
+   lsls['egypt'] = {long:30.802498 , lat:26.820553};
+   lsls['western sahara'] = {long:30.802498 , lat:24.215527};
+   lsls['eritrea'] = {long:39.782334 , lat:15.179384};
+   lsls['spain'] = {long:-3.74922 , lat:40.463667};
+   lsls['ethiopia'] = {long:40.489673 , lat:9.145};
+   lsls['finland'] = {long:25.748151 , lat:61.92411};
+   lsls['fiji'] = {long:179.414413 , lat:-16.578193};
+   lsls['falkland islands [Islas Malvinas]'] = {long:-59.523613 , lat:-51.796253};
+   lsls['micronesia'] = {long:150.550812 , lat:7.425554};
+   lsls['faroe islands'] = {long:-6.911806 , lat:61.892635};
+   lsls['france'] = {long:2.213749 , lat:46.227638};
+   lsls['gabon'] = {long:11.609444 , lat:-0.803689};
+   lsls['united kingdom'] = {long:-3.435973 , lat:55.378051};
+   lsls['grenada'] = {long:-61.604171 , lat:12.262776};
+   lsls['georgia'] = {long:43.356892 , lat:42.315407};
+   lsls['french guiana'] = {long:-53.125782 , lat:3.933889};
+   lsls['guernsey'] = {long:-2.585278 , lat:49.465691};
+   lsls['ghana'] = {long:-1.023194 , lat:7.946527};
+   lsls['gibraltar'] = {long:-5.345374 , lat:36.137741};
+   lsls['greenland'] = {long:-42.604303 , lat:71.706936};
+   lsls['gambia'] = {long:-15.310139 , lat:13.443182};
+   lsls['guinea'] = {long:-9.696645 , lat:9.945587};
+   lsls['guadeloupe'] = {long:-62.067641 , lat:16.995971};
+   lsls['equatorial guinea'] = {long:10.267895 , lat:1.650801};
+   lsls['greece'] = {long:21.824312 , lat:39.074208};
+   lsls['south georgia and the south sandwich islands'] = {long:-36.587909 , lat:-54.429579};
+   lsls['guatemala'] = {long:-90.230759 , lat:15.783471};
+   lsls['guam'] = {long:144.793731 , lat:13.444304};
+   lsls['guinea-bissau'] = {long:-15.180413 , lat:11.803749};
+   lsls['guyana'] = {long:-58.93018 , lat:4.860416};
+   lsls['gaza strip'] = {long:34.308825 , lat:31.354676};
+   lsls['hong kong'] = {long:114.109497 , lat:22.396428};
+   lsls['heard island and mcDonald islands'] = {long:73.504158 , lat:-53.08181};
+   lsls['honduras'] = {long:-86.241905 , lat:15.199999};
+   lsls['croatia'] = {long:15.2 , lat:45.1};
+   lsls['haiti'] = {long:-72.285215 , lat:18.971187};
+   lsls['hungary'] = {long:19.503304 , lat:47.162494};
+   lsls['indonesia'] = {long:113.921327 , lat:-0.789275};
+   lsls['ireland'] = {long:-8.24389 , lat:53.41291};
+   lsls['israel'] = {long:34.851612 , lat:31.046051};
+   lsls['india'] = {long: 78.96288, lat: 20.593684};
+   lsls['iraq'] = {long: 43.679291, lat: 33.223191};
+   lsls['iran'] = {long: 53.688046, lat: 32.427908};
+   lsls['iceland'] = {long: -19.020835, lat: 64.963051};
+   lsls['italy'] = {long: 12.56738, lat: 41.87194};
+   lsls['jersey'] = {long: -2.13125, lat: 49.214439};
+   lsls['jamaica'] = {long: -77.297508, lat: 18.109581};
+   lsls['jordan'] = {long: 36.238414, lat: 30.585164};
+   lsls['japan'] = {long: 138.252924, lat: 36.204824};
+   lsls['kenya'] = {long: 37.906193, lat: -0.023559};
+   lsls['kyrgyzstan'] = {long: 74.766098, lat: 41.20438};
+   lsls['cambodia'] = {long: 104.990963, lat: 12.565679};
+   lsls['kiribati'] = {long: -168.734039, lat: -3.370417};
+   lsls['comoros'] = {long: 43.872219, lat: -11.875001};
+   lsls['north korea'] = {long: 127.510093, lat: 40.339852};
+   lsls['south korea'] = {long: 127.766922, lat: 35.907757};
+   lsls['kuwait'] = {long: 47.481766, lat: 29.31166};
+   lsls['kazakhstan'] = {long: 66.923684, lat: 48.019573};
+   lsls['laos'] = {long: 102.495496, lat: 19.85627};
+   lsls['lebanon'] = {long: 35.862285, lat: 33.854721};
+   lsls['saint lucia'] = {long: -60.978893, lat: 13.909444};
+   lsls['liechtenstein'] = {long: 9.555373, lat: 47.166};
+   lsls['sri lanka'] = {long: 80.771797, lat: 7.873054};
+   lsls['liberia'] = {long: -9.429499, lat: 6.428055};
+   lsls['morocco'] = {long: -7.09262, lat: 31.791702};
+   lsls['madagascar'] = {long: 46.869107, lat: -18.766947};
+   lsls['mali'] = {long: -3.996166, lat: 17.570692};
+   lsls['myanmar'] = {long: 95.956223, lat: 21.913965};
+   lsls['mongolia'] = {long: 103.846656, lat: 46.862496};
+   lsls['macau'] = {long: 113.543873, lat: 22.198745};
+   lsls['mexico'] = {long: -102.552784, lat: 23.634501};
+   lsls['malaysia'] = {long: 101.975766, lat: 4.210484};
+   lsls['namibia'] = {long: 18.49041, lat: -22.95764};
+   lsls['niger'] = {long: 8.081666, lat: 17.607789};
+   lsls['nigeria'] = {long: 8.675277, lat: 9.081999};
+   lsls['nicaragua'] = {long: -85.207229, lat: 12.865416};
+   lsls['netherlands'] = {long: 5.291266, lat: 52.132633};
+   lsls['norway'] = {long: 8.468946, lat: 60.472024};
+   lsls['nepal'] = {long: 84.124008, lat: 28.394857};
+   lsls['nauru'] = {long: 166.931503, lat: -0.522778};
+   lsls['new zealand'] = {long: 174.885971, lat: -40.900557};
+   lsls['oman'] = {long: 55.923255, lat: 21.512583};
+   lsls['panama'] = {long: -80.782127, lat: 8.537981};
+   lsls['peru'] = {long: -75.015152, lat: -9.189967};
+   lsls['philippines'] = {long: 121.774017, lat: 12.879721};
+   lsls['pakistan'] = {long: 69.345116, lat: 30.375321};
+   lsls['poland'] = {long: 19.145136, lat: 51.919438};
+   lsls['puerto rico'] = {long: -66.590149, lat: 18.220833};
+   lsls['portugal'] = {long: -8.224454, lat: 39.399872};
+   lsls['qatar'] = {long: 51.183884, lat: 25.354826};
+   lsls['russia'] = {long: 105.318756, lat: 61.52401};
+   lsls['rwanda'] = {long: 29.873888, lat: -1.940278};
+   lsls['saudi arabia'] = {long: 45.079162, lat: 23.885942};
+   lsls['sudan'] = {long: 30.217636, lat: 12.862807};
+   lsls['sweden'] = {long: 60.128161, lat: 60.128161};
+   lsls['singapore'] = {long: 1.352083, lat: 1.352083};
+   lsls['somalia'] = {long: 46.199616, lat: 5.152149};
+   lsls['syria'] = {long: 38.996815, lat: 34.802075};
+   lsls['chad'] = {long: 18.732207, lat: 15.454166};
+   lsls['thailand'] = {long: 100.992541, lat: 15.870032};
+   lsls['turkmenistan'] = {long: 59.556278, lat: 38.969719};
+   lsls['tunisia'] = {long: 9.537499, lat: 33.886917};
+   lsls['turkey'] = {long: 35.243322, lat: 38.963745};
+   lsls['taiwan'] = {long: 120.960515, lat: 23.69781};
+   lsls['tanzania'] = {long: 34.888822, lat: -6.369028};
+   lsls['ukraine'] = {long: 31.16558, lat: 48.379433};
+   lsls['uganda'] = {long: 32.290275, lat: 1.373333};
+   lsls['united states'] = {long: -95.712891, lat: 37.09024};
+   lsls['uruguay'] = {long: -55.765835, lat: -32.522779};
+   lsls['uzbekistan'] = {long: 64.585262, lat: 41.377491};
+   lsls['venezuela'] = {long: -66.58973, lat: 6.42375};
+   lsls['vietnam'] = {long: 108.277199, lat: 14.058324};
+   lsls['samoa'] = {long: -172.104629, lat: -13.759029};
+   lsls['yemen'] = {long: 48.516388, lat: 15.552727};
+   lsls['south africa'] = {long: 22.937506, lat: -30.559482};
+   lsls['zambia'] = {long: 27.849332, lat: -13.133897};
+   lsls['zimbabwe'] = {long: 29.154857, lat: -19.015438};
+
+    var arr = [];
+    if (place in lsls){
+      arr.push(lsls[place].lat);
+      arr.push(lsls[place].long);
+    }
+    return arr;
 }
 
 function locs(place){
 
   place = (place + "").toLowerCase();
   var locsAdd = {};
-  // Add keys to the hashmap
+
   locsAdd['alabama'] = { long: 33, lat: -87 };
   locsAdd['alaska'] = { long: 61, lat: -152 };
   locsAdd['arizona'] = { long: 34, lat: -111 };
@@ -420,266 +677,247 @@ function locs(place){
   locsAdd['wisconsin'] = { long: 44, lat: -89};
   locsAdd['wyoming'] = { long: 43, lat: -107};
 
-  var arr = []
-  if (place in locsAdd){     // modify cat key here
+  var arr = [];
+  if (place in locsAdd){
     arr.push(locsAdd[place].long);
     arr.push(locsAdd[place].lat);
   }
   return arr;
 }
 
+
+
+
 function getInput() {
   document.getElementById("error1").innerHTML = "";
-  var x = document.getElementById("startDate").value;
-  var y = document.getElementById("endDate").value;
+  var xt = document.getElementById("startDate").value;
+  var yt = document.getElementById("endDate").value;
   var z = document.getElementById("location").value;
   var a = document.getElementById("keyterm").value;
 
+  if(z!=""){
+    var checkLoc = locsCountry(z);
+    var url = "";
+    if(checkLoc.length != 0){
+        if(xt=="" || yt==""){
+          document.getElementById("error1").innerHTML = "<font color='red'>"+"Input Incorrect. Start date and End date not provided."+"</font>";
+        }
+        if (xt!="" && yt!="" && z!=""){
 
-  //all parameters
-  if (x!="" && y!="" && a!="" && z!=""){
-      fetch('http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'location='+z+'&'+'keyterm='+a, {
-         method: 'GET',
-         dataType: 'json',
-         crossdomain: 'true',
-         headers: {
-             'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
-             'Access-Control-Allow-Methods': 'GET',
-             'Access-Control-Allow-Headers': 'Content-Type',
-             'Accept': 'application/json',
-             'Content-Type': 'application/json'
-         }
-      })
-      .then(function(response) {
-         if (!response.ok) {
-             var x =  Error(response.status);
-             //alert(x)
-             if (x == "Error: 404"){
-               document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
-               //alert("No result found.")
-               return
+          if(a!=""){
+            url = "https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/everything?q=disease AND outbreak"+ " AND "+z+" AND "+a+"&from="+xt+"&to="+yt+"&language=en&apiKey=84ceb92e06b44f1db554d716c0fa0a01";
+          }
+          else{
+            url = "https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/everything?q=disease AND outbreak"+ " AND "+z+"&from="+xt+"&to="+yt+"&language=en&apiKey=84ceb92e06b44f1db554d716c0fa0a01";
+          }
+
+          fetch(url, {
+             method: 'GET',
+             dataType: 'json',
+             crossdomain: 'true',
+             headers: {
+                 'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
+                 'Access-Control-Allow-Methods': 'GET',
+                 'Access-Control-Allow-Headers': 'Content-Type',
+                 'Accept': 'application/json',
+                 'Content-Type': 'application/json'
              }
-             else if (x == "Error: 400"){
-               document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
-               //alert("Incorrect input")
-               return
+          })
+          .then(function(response) {
+             if (!response.ok) {
+                 var x =  Error(response.status);
+                 //console.log(x);
+                 if (x == "Error: 404"){
+                   document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
+                   return
+                 }
+                 else if (x == "Error: 400"){
+                   document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
+                   return
+                 }
              }
-         }
-         //else{
-         return response.json();
-       //  }
+             return response.json();
+           })
+          .then(function(data) {
+             //console.log(data)
+             markLocationsRemove(locsARR);
+             markCountrySearch(data, earth, z);
+          })
+        }
+    }
+  }
+
+  if(xt != ""){
+    var x = xt+"T00:00:00"
+  }
+  if(yt != ""){
+    var y = yt+"T00:00:00"
+  }
+
+  var cLoc = locsCountry(z);
+  if(cLoc.length == 0){
+      if (x!="" && y!="" && a!="" && z!=""){
+          fetch('http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'location='+z+'&'+'keyterm='+a, {
+             method: 'GET',
+             dataType: 'json',
+             crossdomain: 'true',
+             headers: {
+                 'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
+                 'Access-Control-Allow-Methods': 'GET',
+                 'Access-Control-Allow-Headers': 'Content-Type',
+                 'Accept': 'application/json',
+                 'Content-Type': 'application/json'
+             }
+          })
+          .then(function(response) {
+             if (!response.ok) {
+                 var x =  Error(response.status);
+                 if (x == "Error: 404"){
+                   document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
+                   return
+                 }
+                 else if (x == "Error: 400"){
+                   document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
+                   return
+                 }
+             }
+             return response.json();
+           })
+          .then(function(data) {
+             markLocationsRemove(locsARR);
+             markLocationsSearch(data, earth, z);
+          })
+
+      }
+
+      else if (x!="" && y!="" && z!=""){
+         fetch('http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'location='+z, {
+            method: 'GET',
+            dataType: 'json',
+            crossdomain: 'true',
+            headers: {
+                'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+         })
+         .then(function(response) {
+            if (!response.ok) {
+                var x =  Error(response.status);
+                if (x == "Error: 404"){
+                  document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
+                  return
+                }
+                else if (x == "Error: 400"){
+                  document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
+                  return
+                }
+            }
+            return response.json();
+          })
+         .then(function(data) {
+
+            markLocationsRemove(locsARR);
+            markLocationsSearch(data, earth, z);
+
+         })
+      }
+
+
+      else if (x!="" && y!="" && a!=""){
+         fetch('http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'keyterm='+a, {
+            method: 'GET',
+            dataType: 'json',
+            crossdomain: 'true',
+            headers: {
+                'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+         })
+         .then(function(response) {
+            if (!response.ok) {
+                var x =  Error(response.status);
+                if (x == "Error: 404"){
+                  document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
+                  return
+                }
+                else if (x == "Error: 400"){
+                  document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
+                  return
+                }
+            }
+            //else{
+            return response.json();
+          //  }
+          })
+          .then(function(data) {
+
+            if(data == null){
+              return
+            }
+            markLocationsRemove(locsARR);
+            var len = Object.keys(data).length;
+            console.log(Object.keys(data).length);
+            for (let i = 0; i<len; i++){
+              markLocations(data[i], earth);
+
+            }
+
+         })
+      }
+
+
+      //startdate and enddate
+      else if (x!="" && y!=""){
+        var url = 'http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y
+        fetch(url, {
+            method: 'GET',
+            dataType: 'json',
+            crossdomain: 'true',
+            headers: {
+                'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(function(response) {
+           if (!response.ok) {
+               var x =  Error(response.status);
+               //alert(x)
+               if (x == "Error: 404"){
+                 document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
+                 //alert("No result found.")
+                 return
+               }
+               else if (x == "Error: 400"){
+                 document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
+                 //alert("Incorrect input")
+                 return
+               }
+           }
+           //else{
+           return response.json();
+         //  }
        })
-      .then(function(data) {
-         //markLocations(data, earth)
-         //initialize2();
-         markLocationsRemove(locsARR);
-         markLocationsSearch(data, earth, z);
-         // var len = Object.keys(data).length;
-         // console.log(Object.keys(data).length);
-         // for (let i = 0; i<len; i++){
-         //   markLocations(data[i], earth);
-         //   //markLocationsRemove(data[i], earth);
-         //   //earth.setMap(null);
-         // }
-
-
-         // make list
-         //markLocationsSearch(data, earth, z);
-         // if (data.status != 404){
-         //   markLocationsRemove(locsARR);
-         //   markLocationsSearch(data.json(), earth, z);
-         // }
-         // else{
-         //   alert("ERROR404: No result found");
-         // }
-         //console.log(data)
-       //  document.getElementById('result').innerHTML = `${data.url}`;
-      })
-
-      //markLocationsSearch("data.location", earth)
-  }
-
-
-  //startdate enddate and location
-  else if (x!="" && y!="" && z!=""){
-     fetch('http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'location='+z, {
-     //fetch('https://cors-anywhere.herokuapp.com/http://0.0.0.0:5000/outbreaktable/show/2019-02-15T03:00:00/2019-02-25T03:00:00', {
-        method: 'GET',
-        dataType: 'json',
-        crossdomain: 'true',
-        headers: {
-            'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
-            'Access-Control-Allow-Methods': 'GET',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-     })
-     .then(function(response) {
-        if (!response.ok) {
-            var x =  Error(response.status);
-            //alert(x)
-            if (x == "Error: 404"){
-              document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
-              //alert("No result found.")
-              return
-            }
-            else if (x == "Error: 400"){
-              document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
-              //alert("Incorrect input")
-              return
-            }
-        }
-        //else{
-        return response.json();
-      //  }
-      })
-     //.then((resp) => resp.json())
-     .then(function(data) {
-        //markLocations(data, earth)
-        //initialize2();
-        markLocationsRemove(locsARR);
-        markLocationsSearch(data, earth, z);
-        // if (data.status != 404){
-        //   markLocationsRemove(locsARR);
-        //   markLocationsSearch(data.json(), earth, z);
-        // }
-        // else{
-        //   alert("ERROR404: No result found");
-        // }
-        //console.log(data)
-      //  document.getElementById('result').innerHTML = `${data.url}`;
-     })
-    // markLocations(data, earth)
-  }
-
-
-  //startdate enddate and keywords
-  else if (x!="" && y!="" && a!=""){
-     fetch('http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'keyterm='+a, {
-     //fetch('https://cors-anywhere.herokuapp.com/http://0.0.0.0:5000/outbreaktable/show/2019-02-15T03:00:00/2019-02-25T03:00:00', {
-        method: 'GET',
-        dataType: 'json',
-        crossdomain: 'true',
-        headers: {
-            'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
-            'Access-Control-Allow-Methods': 'GET',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-     })
-     .then(function(response) {
-        if (!response.ok) {
-            var x =  Error(response.status);
-            //alert(x)
-            if (x == "Error: 404"){
-              document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
-              //alert("No result found.")
-              return
-            }
-            else if (x == "Error: 400"){
-              document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
-              //alert("Incorrect input")
-              return
-            }
-        }
-        //else{
-        return response.json();
-      //  }
-      })
-      .then(function(data) {
-        //markLocations(data, earth)
-        //initialize2();
-
-        if(data == null){
-          return
-        }
-        //console.log(data)
-        markLocationsRemove(locsARR);
-        var len = Object.keys(data).length;
-        console.log(Object.keys(data).length);
-        for (let i = 0; i<len; i++){
-          markLocations(data[i], earth);
-          //markLocationsRemove(data[i], earth);
-          //earth.setMap(null);
-        }
-        //markLocations(data, earth)
-        //markLocationsSearch(data, earth, z);
-        // if (data.status != 404){
-        //   markLocationsRemove(locsARR);
-        //   markLocationsSearch(data.json(), earth, z);
-        // }
-        // else{
-        //   alert("ERROR404: No result found");
-        // }
-        //console.log(data)
-      //  document.getElementById('result').innerHTML = `${data.url}`;
-     })
-     //markLocationsSearch("data.location", earth)
-  }
-
-
-  //startdate and enddate
-  else if (x!="" && y!=""){
-    var url = 'http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y
-    fetch(url, {
-    //fetch('https://cors-anywhere.herokuapp.com/http://0.0.0.0:5000/outbreaktable/show/2019-02-15T03:00:00/2019-02-25T03:00:00', {
-        method: 'GET',
-        dataType: 'json',
-        crossdomain: 'true',
-        headers: {
-            'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
-            'Access-Control-Allow-Methods': 'GET',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(function(response) {
-       if (!response.ok) {
-           var x =  Error(response.status);
-           //alert(x)
-           if (x == "Error: 404"){
-             document.getElementById('error1').innerHTML = "<font color='red'>"+"No result found.<br>Looks like everyone is healthy!" + "</font>"
-             //alert("No result found.")
-             return
+        .then(function(data) {
+           //markLocations(data, earth)
+           //initialize2();
+           markLocationsRemove(locsARR);
+           var len = Object.keys(data).length;
+           //console.log(Object.keys(data).length);
+           for (let i = 0; i<len; i++){
+             markLocations(data[i], earth);
            }
-           else if (x == "Error: 400"){
-             document.getElementById('error1').innerHTML = "<font color='red'>"+"Incorrect input.<br>Check the fields and try again!"+ "</font>"
-             //alert("Incorrect input")
-             return
-           }
-       }
-       //else{
-       return response.json();
-     //  }
-   })
-    .then(function(data) {
-       //markLocations(data, earth)
-       //initialize2();
-       markLocationsRemove(locsARR);
-       var len = Object.keys(data).length;
-       console.log(Object.keys(data).length);
-       for (let i = 0; i<len; i++){
-         markLocations(data[i], earth);
-         //markLocationsRemove(data[i], earth);
-         //earth.setMap(null);
-       }
-       //markLocations(data, earth);
-       // if (data.status != 404){
-       //   markLocationsRemove(locsARR);
-       //   markLocations(data, earth)
-       //
-       // }
-       // else{
-       //   alert("ERROR404: No result found");
-       // }
-       //console.log(data)
-     //  document.getElementById('result').innerHTML = `${data.url}`;
-    })
-     //markLocations("data.location", earth)
-  }
+        })
+      }
+    }
 }
 
 window.locsARR = [];
@@ -689,48 +927,39 @@ function markLocations(data, earth){
     return
   }
   var tempData = data.reports[0].reported_events[0].location
-  console.log(tempData)
   var locsArr = tempData.split(", ");
   for (let i = 0; i < locsArr.length; i++){
-      console.log(locsArr[i])
       var arr = locs(locsArr[i])
+      var locSub = "<font size='4' color='red'><strong>"+locsArr[i]+"</strong></font>"
       var marker = WE.marker([arr[0], arr[1]]).addTo(earth);
 
 
-      var repSub = ""
+      var repSub = "";
       for(let i = 0; i < data.reports[0].reported_events.length; i++){
         if(data.reports[0].reported_events[i].type == "infected"){
-            repSub = "<br>"+"<em>"+"Reported cases: "+"</em>"+data.reports[0].reported_events[i].number_affected
+            repSub = "<br>"+"<font size='2' color='red'><strong>"+"Reported cases: "+"</strong></font>"+data.reports[0].reported_events[i].number_affected;
         }
       }
 
-      var hosSub = ""
+      var hosSub = "";
       for(let i = 0; i < data.reports[0].reported_events.length; i++){
         if(data.reports[0].reported_events[i].type == "hospitalised"){
-            hosSub = "<br>"+"<em>"+"Hospitalised cases: "+"</em>"+data.reports[0].reported_events[i].number_affected
+            hosSub = "<br>"+"<font size='2' color='red'><strong>"+"Hospitalised cases: "+"</strong></font>"+data.reports[0].reported_events[i].number_affected;
         }
       }
 
-
-      var deadSub = ""
+      var deadSub = "";
       for(let i = 0; i < data.reports[0].reported_events.length; i++){
         if(data.reports[0].reported_events[i].type == "death"){
-            deadSub = "<br>"+"<em>"+"Dead: "+"</em>"+data.reports[0].reported_events[i].number_affected
+            deadSub = "<br>"+"<font size='2' color='red'><strong>"+"Dead: "+"</strong></font>"+data.reports[0].reported_events[i].number_affected;
         }
       }
 
-      var subStr = repSub+hosSub+deadSub
-      var str = "<strong><u>"+data.headline+"</strong></u>"+"<br>"+data.date_of_publication+"<i>"+"<br>"+data.main_text+"</i>"+subStr+"<br>"+"<a href= "+data.url+">"+"find out more"+"</a>"+"<br>"
+      var subStr = repSub+hosSub+deadSub;
+      var str = locSub+"<br>"+"<strong><u><font size='3' color='Steelblue'>"+data.headline+"</strong></u></font>"+"<br>"+data.date_of_publication+"<br>"+data.main_text+subStr+"<br>"+"<a href= "+data.url+">"+"find out more about the outbreak"+"</a>"+"<br>";
       marker.bindPopup(str, {maxWidth: 500, maxHeight: 2000,  closeButton: true});
-      //var markerCustom = WE.marker([0, 0], '/img/logo-webglearth-white-100.png', 100, 24).addTo(earth);
-      //marker.removeFrom(earth)
       locsARR.push(marker);
-      //WE.marker([arr[0], arr[1]]).removeFrom(earth);
   }
-  // console.log(locsARR.length)
-
-  //marker.removeFrom(earth)
-  //marker.setMap(null);
 }
 
 function markLocationsRemove(locsAR){
@@ -739,87 +968,95 @@ function markLocationsRemove(locsAR){
   }
 }
 
+function markCountrySearch(data, earth, place){
+  var arr = locsCountry(place);
+  var locSub = "<font size='4' color='red'><strong>"+place+"</strong></font><br>"
+  if(arr == []){
+    return
+  }
+
+  var marker = WE.marker([arr[0], arr[1]]).addTo(earth);
+
+  var str = locSub+"<br>"+"<strong><u><font size='2' color='Steelblue'>"+data.articles[0].title+"</strong></u></font>"+"<br>"+data.articles[0].description+"<br>"+"<a href= "+data.articles[0].url+">"+"find out more"+"</a>"+"<br>"
+
+  //console.log(data.articles.length)
+  var limiter = 0;
+  for(i=1; i<data.articles.length; i++){
+    if (limiter < 2){
+      var str2 = "<br>"+"<br>"+"<strong><u><font size='2' color='Steelblue'>"+data.articles[i].title+"</strong></u></font>"+"<br>"+data.articles[i].description+"<br>"+"<a href= "+data.articles[i].url+">"+"find out more"+"</a>"+"<br>"
+      str = str+str2
+      limiter = limiter+1;
+    }
+  }
+  //var str2 = "<br>"+"<strong><u><font size='2' color='Steelblue'>"+data.articles[1].title+"</strong></u></font>"+"<br>"+data.articles[1].description+"<br>"+"<a href= "+data.articles[1].url+">"+"find out more"+"</a>"+"<br>"
+  marker.bindPopup(str, {maxWidth: 500, maxHeight: 2000,  closeButton: true}).openPopup();
+  panTo(arr);
+  locsARR.push(marker);
+}
+
 function markLocationsSearch(data, earth, place){
 
     var arr = locs(place)
+
+    var locSub = "<font size='4' color='red'><strong>"+place+"</strong></font>"
     if(arr == []){
       return
     }
 
-    //console.log(data)
     if(data[0].reports[0].reported_events[0].location == ""){
       return
     }
 
     var marker = WE.marker([arr[0], arr[1]]).addTo(earth);
-    // var polygon = WE.polygon([[arr[0]-0.15, arr[1]], [arr[0], arr[1]-0.15], [arr[0]-0.15, arr[1]-0.15]], {
-    //   opacity: 1,
-    //   fillOpacity: 0.3,
-    //   weight: 5
-    // }).addTo(earth);
-
 
     var repSub = ""
     for(let i = 0; i < data[0].reports[0].reported_events.length; i++){
       if(data[0].reports[0].reported_events[i].type == "infected"){
-          repSub = "<br>"+"<em>"+"Reported cases: "+"</em>"+data[0].reports[0].reported_events[i].number_affected
+          repSub = "<br>"+"<font size='2' color='red'><strong>"+"Reported cases: "+"</strong></font>"+data[0].reports[0].reported_events[i].number_affected
       }
     }
 
     var hosSub = ""
     for(let i = 0; i < data[0].reports[0].reported_events.length; i++){
       if(data[0].reports[0].reported_events[i].type == "hospitalised"){
-          hosSub = "<br>"+"<em>"+"Hospitalised cases: "+"</em>"+data[0].reports[0].reported_events[i].number_affected
+          hosSub = "<br>"+"<font size='2' color='red'><strong>"+"Hospitalised cases: "+"</strong></font>"+data[0].reports[0].reported_events[i].number_affected
       }
     }
-
 
     var deadSub = ""
     for(let i = 0; i < data[0].reports[0].reported_events.length; i++){
       if(data[0].reports[0].reported_events[i].type == "death"){
-          deadSub = "<br>"+"<em>"+"Dead: "+"</em>"+data[0].reports[0].reported_events[i].number_affected
+          deadSub = "<br>"+"<font size='2' color='red'><strong>"+"Dead: "+"</strong></font>"+data[0].reports[0].reported_events[i].number_affected
       }
     }
 
     var subStr = repSub+hosSub+deadSub
-    var str = "<strong><u><font size='2' color='blue'>"+data[0].headline+"</strong></u></font>"+"<br>"+data[0].date_of_publication+"<i>"+"<br>"+data[0].main_text+"</i>"+subStr+"<br>"+"<a href= "+data[0].url+">"+"find out more"+"</a>"+"<br>"
+    var str = locSub+"<br>"+"<strong><u><font size='2' color='Steelblue'>"+data[0].headline+"</strong></u></font>"+data[0].date_of_publication+"<br>"+data[0].main_text+subStr+"<br>"+"<a href= "+data[0].url+">"+"find out more"+"</a></br>"
     marker.bindPopup(str, {maxWidth: 500, maxHeight: 2000,  closeButton: true}).openPopup();
+    locsARR.push(marker);
     panTo(arr);
 
-    // var subStr = "<br>"+"<em>"+"Reported cases: "+"</em>"+data[0].reports[0].reported_events+"<br>"+"<em>"+"Hospitalised cases: "+"</em>"+data[0].reports[0].hospitalised+"<br>"+"<em>"+"Deaths: "+"</em>"+data[0].reports[0].deaths+"<br>"//+"<em>"+"Locations affected: "+"</em>"+data[0].reports[0].locations
-    // var str = "<strong><u><font size='2' color='blue'>"+data[0].headline+"</strong></u></font>"+"<br>"+data[0].date_of_publication+"<i>"+"<br>"+data[0].main_text+"</i>"+subStr+"<br>"+"<a href= "+data[0].url+">"+"Find out more about the outbreak"+"</a>"+"<br>"
-    marker.bindPopup(str, {maxWidth: 500, maxHeight: 2000,  closeButton: true}).openPopup();
-    //var markerCustom = WE.marker([arr[0], arr[1]], '/img/logo-webglearth-white-100.png', 100, 24).addTo(earth);
-    panTo(arr);
 }
-
 
 function newsAPI(){
   fetch('https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/everything?q=health AND outbreak&language=en&apiKey=84ceb92e06b44f1db554d716c0fa0a01', {
-  // //fetch('https://cors-anywhere.herokuapp.com/http://0.0.0.0:5000/outbreaktable/show/2019-02-15T03:00:00/2019-02-25T03:00:00', {
+
       method: 'GET',
       dataType: 'json',
       crossdomain: 'true',
       headers: {
           'Access-Control-Allow-Origin': 'http://127.0.0.1:12000',
           'Access-Control-Allow-Methods': 'GET',
-          // 'Access-Control-Allow-Methods': 'GET',
           'Access-Control-Allow-Headers': 'Content-Type',
-          //  'Access-Control-Allow-Origin': '*',
           'Accept': 'application/json',
           'Content-Type': 'application/json'
       }
   })
   .then((resp) => resp.json())
   .then(function(data) {
-      //console.log(data)
       var element = document.getElementById("result");
-      // document.getElementById('result').innerHTML = `${data.articles[i].title}`;
       for(i=0; i<20 ; i++){
-
-        console.log(data.articles[i].title)
         var a = document.createElement('a');
-        //a.title
         var node = document.createTextNode(""+ data.articles[i].title);
         a.appendChild(node);
         a.href = ""+data.articles[i].url
