@@ -281,26 +281,24 @@ class show(Resource):
             # type3 = None
 
             reportedArr = []
-
             type = [None, None, None]
             no = [0, 0, 0]
-
-            print(row[6])
+            # print(row[6])
             if row[5] != 'unknown':
                 if row[5] != None:
-	                if int(row[5]) > 0:
-	                    type[0] = "infected"
-	                    no[0] = row[5]
+                    if int(row[5]) > 0:
+                        type[0] = "infected"
+                        no[0] = row[5]
             if row[6] != 'unknown':
                 if row[6] != None:
-	                if int(row[6]) > 0:
-	                    type[1] = "hospitalised"
-	                    no[1] = row[6]
+                    if int(row[6]) > 0:
+                        type[1] = "hospitalised"
+                        no[1] = row[6]
             if row[7] != 'unknown':
                 if row[7] != None:
-	                if int(row[7]) > 0:
-	                    type[2] = "death"
-	                    no[2] = row[7]
+                    if int(row[7]) > 0:
+                        type[2] = "death"
+                        no[2] = row[7]
 
             if row[8] != None:
                 if type[0] == None and type[1] == None and type[2] == None:
@@ -311,8 +309,6 @@ class show(Resource):
                         'number_affected': "unknown"
                     }
                     reportedArr.append(reported)
-
-
 
 
             # 'hospitalised' : row[6],
