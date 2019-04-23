@@ -1,4 +1,3 @@
-
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -344,3 +343,4 @@ for row in rows:
 #     print "\n"
 
 db.close()
+
