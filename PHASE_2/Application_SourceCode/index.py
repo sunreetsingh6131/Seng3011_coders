@@ -284,6 +284,7 @@ class show(Resource):
 
             type = [None, None, None]
             no = [0, 0, 0]
+
             print(row[6])
             if row[5] != 'unknown':
                 if row[5] != None:
