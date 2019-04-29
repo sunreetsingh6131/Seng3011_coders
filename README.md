@@ -8,7 +8,7 @@ Deliverable 2:
 
 Updated Design Details and Management Information in the Report folder.
 
-The testscripts can be found unser SENG3011_Coders/PHASE_1.
+The testscripts can be found under SENG3011_Coders/PHASE_1.
 
 For the swagger documemntation:
 https://app.swaggerhub.com/apis-docs/SENG3011_Coders/swagger/1.0.0-oas3
