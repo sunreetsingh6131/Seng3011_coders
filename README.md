@@ -25,12 +25,12 @@ Final prototype online url - http://35.189.54.60:12000/
 
 Softwares and libraries needed :
 Webkit nightly
-flask_restplus
-flask_cors
-json
-request
-Response
-bottle
-mysql.connector
+,flask_restplus
+,flask_cors
+,json
+,request
+,Response
+,bottle
+,mysql.connector
 
 
