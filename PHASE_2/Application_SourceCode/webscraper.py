@@ -6,14 +6,11 @@ import datetime
 import mysql.connector
 from datetime import date
 import urllib
-#from urllib.request import Request, urlopen
-
 
 db = mysql.connector.connect(
   host="localhost",
   user="root",
   passwd="Password"
-  #auth_plugin="caching_sha2_password"
 )
 
 cur = db.cursor()
@@ -22,12 +19,6 @@ Tname1 = "outbreakTable"
 
 cur.execute('Create database if not exists cdcDB')
 cur.execute('use cdcDB')
-# if checkTableExists(db, Tname1) != True:
-#     #cur.execute('DROP TABLE IF EXISTS `outbreakTable`')
-#     table ='create table if not exists outbreakTable(id int NOT NULL AUTO_INCREMENT, url varchar(300), headline varchar(200), date varchar(20), details varchar(1000), PRIMARY KEY (id))'
-#     cur.execute(table)
-#     cur.execute('ALTER TABLE outbreakTable AUTO_INCREMENT = 1')
-# else:
 cur.execute('DROP TABLE IF EXISTS `outbreakTable`')
 table ='create table if not exists outbreakTable(id int NOT NULL AUTO_INCREMENT, url varchar(300), headline varchar(200), date varchar(20), details varchar(1000), reported_cases varchar(20), hospitalised_cases varchar(20), deaths varchar(20), location varchar(500), disease varchar(50), syndrome varchar(50), keyterms varchar(100), PRIMARY KEY (id))'
 cur.execute(table)
@@ -237,15 +228,6 @@ for outbreaks in bulletPoints.findAll('li'):
     if urls != None:
         url4newpage = urls.get('href')
 
-        #if re.search(r'.*\.html$', url4newpage) == None:
-        #    print "--------------------------------------------"
-            #req = urllib.request.Request(url4newpage)
-            #with urllib.request.urlopen(req) as response:
-            #    newPageContent = response.read()
-
-            #print urls.text
-            #print newPageContent
-
         if pattern.match(url4newpage) == None:
             url4newpage = glueIt + url4newpage
 
@@ -292,8 +274,6 @@ for outbreaks in bulletPoints.findAll('li'):
     reported_casesAtt = reported_case
     hospitalizedAtt = hospitalised
     deathsAtt = deaths
-
-    #locationAtt = locations
     locationAtt = ", ".join(locations)
     diseasesAtt = ", ".join(diseases)
 
@@ -304,43 +284,12 @@ for outbreaks in bulletPoints.findAll('li'):
 
     cur.execute('insert into outbreakTable (url, headline, date, details, reported_cases, hospitalised_cases, deaths, location, disease, syndrome, keyterms) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(urlAtt,headlineAtt,dopAtt, main_textAtt, reported_casesAtt, hospitalizedAtt, deathsAtt, locationAtt, diseasesAtt, syndromeAtt, ktAtt))
     db.commit()
-    # outbreakObject = {
-    #
-    #     "url": url4newpage,
-    #     "headline": headline,
-    #     "date_of_publication": dateOfPublication,
-    #     "main_text": checkMainText,
-    #     "reported_cases": reported_case,
-    #     "hospitalised" : hospitalised,
-    #     "death" : deaths,
-    #     "location" : locations,
-    #     "disease" : diseasesAtt,
-    #     "syndrome" : syndromeAtt
-    # }
-    # OutbreakArr.append(outbreakObject)
-    # with open('data.json', 'w') as outfile:
-    #     json.dump(OutbreakArr, outfile)
-    #
-    # with open('data.json') as json_data:
-    #     jsonData = json.load(json_data)
-
-    #print locations
+    
 cur.execute('select * from outbreakTable')
 rows = cur.fetchall()
 print('Total Row(s):', cur.rowcount)
 for row in rows:
     print(row)
-
-# for i in jsonData:
-#     print "URL: "+ i['url']
-#     print "HEADLINE: "+ i['headline']
-#     print "DATE: " + i['date_of_publication']
-#     print "BODY: "+ i['main_text']
-#     print "REPORTED CASES: "+ i['reported_cases']
-#     print "HOSPITALISED CASES: "+ i['hospitalised']
-#     print "DEATHS: "+ i['death']
-#     #print "locations: " + i['locations']
-#     print "\n"
 
 db.close()
 
