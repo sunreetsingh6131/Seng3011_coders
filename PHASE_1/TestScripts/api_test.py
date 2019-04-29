@@ -4,9 +4,6 @@ import re
 import datetime
 import flask
 
-
-
-
 # This script is going to be used to check is the API is providing suitable and correct results.
 headers = {'content-type': 'application/json'}
 sample_input2 = json.dumps({
@@ -36,18 +33,14 @@ url = 'http://0.0.0.0:5000/show'
 # Test1. check for error codes on wrong inputs -
 def case1():
 	print("Test Case 1: Checking for a sample wrong input")
-	# print(sample_input2)
 	r = requests.get(url, data=sample_input2 , headers=headers)
-	# print(r.status_code)
 	assert(r.status_code == 400)
-	# print(r.text)
 	print("Test 1: Pass")
 
 
 # Test2 check for correct input and output
 def case2():
 	print("Test case 2: Checking if the input is correct")
-	# print(sample_input)
 	r = requests.get(url, data=sample_input , headers=headers)
 	print("\t2.1 Check the status code")
 	assert(r.status_code == 200)
@@ -85,7 +78,6 @@ def case2():
 	print("Test 2: Pass")
 
 
-
 # Check for correct input but no output
 def case3():
 	print("Test Case 3: Check if input correct but no output {status code 404}")
@@ -94,11 +86,6 @@ def case3():
 
 	assert(r.status_code == 404)
 	print("Test 3: Pass")
-
-
-
-
-
 
 
 case1()
