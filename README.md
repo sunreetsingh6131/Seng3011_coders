@@ -1,18 +1,36 @@
 # SENG3011_Coders
 
-Webserver.py : 
+Deliverable 1:
 
-Run the Webserver.py as "python Webserver.py PORTNUMBER" 
-and in the http://127.0.0.1:PORTNUMBER to display the content of the html file.
+The Design Details and Management Information can be found in SENG3011_CODERS/Reports.
 
-Softwares and libraries needed :
--Webkit nightly
+Deliverable 2:
 
-Try and run the Webserver.py at a different port everytime to avoid the message "Port number already in use!"
+Updated Design Details and Management Information in the Report folder.
 
-API Base online url - http://35.189.54.60:5000/
-Final prototype online url - http://35.189.54.60:12000/
+The testscripts can be found unser SENG3011_Coders/PHASE_1.
 
 For the swagger documemntation:
 https://app.swaggerhub.com/apis-docs/SENG3011_Coders/swagger/1.0.0-oas3
+
+API Base online url - http://35.189.54.60:5000/
+
+Deliverable 3:
+
+Uploaded the updated versions of code time to time.
+
+Deliverable 4:
+
+Final prototype online url - http://35.189.54.60:12000/
+
+Softwares and libraries needed :
+-Webkit nightly
+-flask_restplus
+-flask_cors
+-json
+-request
+-Response
+-bottle
+-mysql.connector
+
 
