@@ -241,7 +241,7 @@ body, html {
 
     //shows Outbreak on main page
     function initShow(){
-      fetch('http://0.0.0.0:5000/show', {
+      fetch('http://35.189.54.60:5000/show', {
           method: 'GET',
           dataType: 'json',
           crossdomain: 'true',
@@ -757,7 +757,7 @@ function getInput() {
   var cLoc = locsCountry(z);
   if(cLoc.length == 0){
       if (x!="" && y!="" && a!="" && z!=""){
-          fetch('http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'location='+z+'&'+'keyterm='+a, {
+          fetch('http://35.189.54.60:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'location='+z+'&'+'keyterm='+a, {
              method: 'GET',
              dataType: 'json',
              crossdomain: 'true',
@@ -791,7 +791,7 @@ function getInput() {
       }
 
       else if (x!="" && y!="" && z!=""){
-         fetch('http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'location='+z, {
+         fetch('http://35.189.54.60:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'location='+z, {
             method: 'GET',
             dataType: 'json',
             crossdomain: 'true',
@@ -827,7 +827,7 @@ function getInput() {
 
 
       else if (x!="" && y!="" && a!=""){
-         fetch('http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'keyterm='+a, {
+         fetch('http://35.189.54.60:5000/show?start_date='+x+'&'+'end_date='+y+'&'+'keyterm='+a, {
             method: 'GET',
             dataType: 'json',
             crossdomain: 'true',
@@ -874,7 +874,7 @@ function getInput() {
 
       //startdate and enddate
       else if (x!="" && y!=""){
-        var url = 'http://0.0.0.0:5000/show?start_date='+x+'&'+'end_date='+y
+        var url = 'http://35.189.54.60:5000/show?start_date='+x+'&'+'end_date='+y
         fetch(url, {
             method: 'GET',
             dataType: 'json',
@@ -958,6 +958,16 @@ function markLocations(data, earth){
       var subStr = repSub+hosSub+deadSub;
       var str = locSub+"<br>"+"<strong><u><font size='3' color='Steelblue'>"+data.headline+"</strong></u></font>"+"<br>"+data.date_of_publication+"<br>"+data.main_text+subStr+"<br>"+"<a href= "+data.url+">"+"find out more about the outbreak"+"</a>"+"<br>";
       marker.bindPopup(str, {maxWidth: 500, maxHeight: 2000,  closeButton: true});
+      var noOfR = data.reports[0].reported_events[0].number_affected;
+      if(noOfR>100){
+        var polygon = WE.polygon([[arr[0], arr[1]-0.15], [arr[0], arr[1]-0.30],[arr[0], arr[1]-0.45]],{
+            opacity: 1,
+            color: '#f00',
+            fillOpacity:0.3,
+            weight:5
+        }
+      ).addTo(earth);
+      }
       locsARR.push(marker);
   }
 }
