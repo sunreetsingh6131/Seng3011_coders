@@ -1,1 +1,1 @@
-No Files
+This folder contains Swagger document with details of how the API is expected to produce/take inputs/outputs.
