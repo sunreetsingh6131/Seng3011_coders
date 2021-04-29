@@ -33,4 +33,5 @@ Webkit nightly
 ,bottle
 ,mysql.connector
 
+![alt text](Screen Shot 2020-05-22 at 1.37.25 pm.png) 
 
