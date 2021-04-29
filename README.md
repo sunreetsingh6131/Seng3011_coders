@@ -33,5 +33,8 @@ Webkit nightly
 ,bottle
 ,mysql.connector
 
-![alt text](./Screen Shot 2020-05-22 at 1.37.25 pm.png) 
+<img width="802" alt="Screen Shot 2020-05-22 at 1 37 53 pm" src="https://user-images.githubusercontent.com/32607077/116494376-054eeb00-a8e4-11eb-9170-3f1a46194628.png">
+<img width="799" alt="Screen Shot 2020-05-22 at 1 37 25 pm" src="https://user-images.githubusercontent.com/32607077/116494379-0718ae80-a8e4-11eb-834e-0d99a5a011a9.png">
+
+
 
